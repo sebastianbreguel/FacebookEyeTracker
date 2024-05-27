@@ -12,6 +12,7 @@ argpase.add_argument("width", type=int, help="Screen width", default=1920)
 argpase.add_argument("height", type=int, help="Screen height", default=1080)
 
 args = vars(argpase.parse_args())
+duration = args['duration']
 name = args["name"]
 width = args["width"]
 height = args["height"]
@@ -21,7 +22,7 @@ base = "images/image.png"
 input_file = f"eye_trackers/my_gaze_data_{name}"
 
 # print("Runnign eye tracker")
-# os.system('python generate.py')
+os.system(f'python generate.py {duration} {name}')
 
 # print("Processing gaze data")
 os.system(

@@ -66,7 +66,7 @@ def save_gaze_data(gaze_samples_list, name):
         return
     print("Sample dictionary keys:", gaze_samples_list[0].keys())
 
-    file_handle = open(f"my_gaze_data_{name}.csv", "w")
+    file_handle = open(f"eye_trackers/my_gaze_data_{name}.csv", "w")
     gaze_writer = csv.writer(file_handle)
     gaze_writer.writerow(
         ["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"]
