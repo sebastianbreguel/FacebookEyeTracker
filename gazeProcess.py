@@ -1,7 +1,8 @@
-import math
-import csv
-from utils import try_float, linear_interpolate
 import argparse
+import csv
+import math
+
+from utils import linear_interpolate, try_float
 
 
 def process_gaze_data(input_file, output_file, width, height):

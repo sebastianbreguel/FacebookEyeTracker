@@ -1,8 +1,10 @@
-import os
 import argparse
 import csv
+import os
+
 import numpy
-from matplotlib import pyplot, image
+from matplotlib import image, pyplot
+
 
 def draw_display(dispsize, imagefile=None):
     """Returns a matplotlib.pyplot Figure and its axes, with a size of

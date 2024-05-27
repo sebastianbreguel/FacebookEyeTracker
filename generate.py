@@ -1,9 +1,11 @@
-import subprocess
+import argparse
 import csv
+import subprocess
 import sys
 import time
+
 import tobii_research as tr
-import argparse
+
 from utils import get_current_time_iso8601
 
 """
