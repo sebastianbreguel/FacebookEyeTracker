@@ -2,7 +2,6 @@ import os
 import argparse
 import csv
 import numpy
-import matplotlib
 from matplotlib import pyplot, image
 
 def draw_display(dispsize, imagefile=None):
@@ -217,15 +216,17 @@ background_image = args['background_image']
 ngaussian = args['n_gaussian_matrix']
 sd = args['standard_deviation']
 
+
 with open(input_path) as f:
 	reader = csv.reader(f)
-	raw = list(reader)
+	raw = list(reader)[1:]
+    
 	
 	gaza_data = []
 	if len(raw[0]) is 2:
 		gaze_data = list(map(lambda q: (int(q[0]), int(q[1]), 1), raw))
 	else:
-		gaze_data =  list(map(lambda q: (int(q[0]), int(q[1]), int(q[2])), raw))
+		gaze_data =  list(map(lambda q: (int(q[0]), int(q[1]), 1), raw))
 		
 	draw_heatmap(gaze_data, (display_width, display_height), alpha=alpha, savefilename=output_name, imagefile=background_image, gaussianwh=ngaussian, gaussiansd=sd)
 
