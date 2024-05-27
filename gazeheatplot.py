@@ -223,7 +223,7 @@ with open(input_path) as f:
     
 	
 	gaza_data = []
-	if len(raw[0]) is 2:
+	if len(raw[0]) == 2:
 		gaze_data = list(map(lambda q: (int(q[0]), int(q[1]), 1), raw))
 	else:
 		gaze_data =  list(map(lambda q: (int(q[0]), int(q[1]), 1), raw))
