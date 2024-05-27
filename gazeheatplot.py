@@ -46,7 +46,6 @@ def draw_display(dispsize, imagefile=None):
         x = int(dispsize[0] / 2 - w / 2)
         y = int(dispsize[1] / 2 - h / 2)
         # draw the image on the screen
-        print(y, x, w , h)
         screen[y:y + h, x:x + w, :] += img
     # dots per inch
     dpi = 100.0
@@ -136,7 +135,6 @@ def draw_heatmap(gazepoints, dispsize, imagefile=None, alpha=0.5, savefilename=N
     # matrix of zeroes
     strt = gwh / 2
     heatmapsize = int(dispsize[1] + 2 * strt), int(dispsize[0] + 2 * strt)
-    print(heatmapsize)
     heatmap = numpy.zeros(heatmapsize, dtype=float)
     # create heatmap
     for i in range(0, len(gazepoints)):

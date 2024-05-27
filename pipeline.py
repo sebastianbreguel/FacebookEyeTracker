@@ -30,5 +30,5 @@ os.system(
 
 # print("Generating heatmap")
 os.system(
-    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -o {name}.png"
+    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -o images/heatmap_{name}.png"
 )
