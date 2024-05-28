@@ -38,7 +38,10 @@ def draw_display(dispsize, imagefile=None):
         if not os.path.isfile(imagefile):
             raise Exception("ERROR in draw_display: imagefile not found at '%s'" % imagefile)
         # load image
+
         img = image.imread(imagefile)
+        img = img[:, :, :3]  # Keep only the first three channels (RGB)
+
 
         # width and height of the image
         w, h = len(img[0]), len(img)

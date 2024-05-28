@@ -2,7 +2,7 @@ import argparse
 import csv
 import math
 
-from utils import linear_interpolate, try_float
+from utils import linear_interpolate, try_float,subtract_seconds_from_datetime
 
 
 def process_gaze_data(input_file, output_file, width, height):
@@ -15,8 +15,7 @@ def process_gaze_data(input_file, output_file, width, height):
     """
     with open(input_file, mode='r') as infile, open(output_file, mode='w', newline='') as outfile:
         reader = csv.DictReader(infile)
-        # fieldnames = ['time_seconds',"current_time", 'x', 'y']
-        fieldnames = ['time_seconds', 'x', 'y']
+        fieldnames = ['time_seconds',"current_time", 'x', 'y']
 
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -41,7 +40,7 @@ def process_gaze_data(input_file, output_file, width, height):
 
 
             rows.append({
-                # 'current_time' : row['current_time'],
+                'current_time' : row['current_time'],
                 'x': avg_x,
                 'y': avg_y,
                 'time_seconds': row['time_seconds'],
@@ -54,6 +53,9 @@ def process_nans(rows, output_file):
     problems = []
     is_in_nans = False
     sub = []
+    max_time = int(float(rows[-1]["time_seconds"]))
+    min_iso_time = rows[0]["current_time"]
+
 
     for index in range(len(rows)):
         row = rows[index]
@@ -72,7 +74,6 @@ def process_nans(rows, output_file):
 
     if problems and problems[0][0] == -1:
         start = problems.pop(0)
-        print(start)
 
     for i in range(len(problems)):
         before = problems[i][0]
@@ -90,8 +91,7 @@ def process_nans(rows, output_file):
             row['y'] = int(y[j-1])
 
     with open(output_file, mode='w', newline='') as outfile:
-        # fieldnames = ['time_seconds','current_time', 'x', 'y']
-        fieldnames = [ 'x', 'y','time_seconds']
+        fieldnames = ['time_seconds','current_time', 'x', 'y']
 
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -99,6 +99,8 @@ def process_nans(rows, output_file):
             if index < start[1]:
                 continue
             row = rows[index]
+            time_actual = max_time - int(float(row['time_seconds']))
+            row["current_time"] = subtract_seconds_from_datetime(min_iso_time, time_actual)
             writer.writerow(row)
 
 
