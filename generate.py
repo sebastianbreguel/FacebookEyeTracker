@@ -11,7 +11,7 @@ from utils import get_current_time_iso8601
 """
 Parameters of your own EYE TRACKER
 """
-TETM_PATH = "C:/Users/Nelson Breguel/AppData/Local/Programs/TobiiProEyeTrackerManager/TobiiProEyeTrackerManager.exe"
+TETM_PATH = "C:/Users/jconc/AppData/Local/Programs/TobiiProEyeTrackerManager/TobiiProEyeTrackerManager.exe"
 SERIAL_NUMBER = "TPNA1-030108540815"
 EYETRACKER_ADDRESS = "tobii-prp://TPNA1-030108540815"
 
@@ -66,7 +66,7 @@ def save_gaze_data(gaze_samples_list, name):
         return
     print("Sample dictionary keys:", gaze_samples_list[0].keys())
 
-    file_handle = open(f"eye_trackers/my_gaze_data_{name}.csv", "w")
+    file_handle = open(f"my_gaze_data_{name}.csv", "w")
     gaze_writer = csv.writer(file_handle)
     gaze_writer.writerow(
         ["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"]

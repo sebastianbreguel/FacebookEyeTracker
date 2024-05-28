@@ -22,14 +22,16 @@ base = "images/image.png"
 input_file = f"eye_trackers/my_gaze_data_{name}"
 
 # print("Runnign eye tracker")
+print("asdasd")
 os.system(f'python generate.py {duration} {name}')
 
+print("asdasd")
 # print("Processing gaze data")
-os.system(
-    f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-)
+#os.system(
+#    f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+#)
 
 # print("Generating heatmap")
-os.system(
-    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -o images/heatmap_{name}.png"
-)
+#os.system(
+#    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -o images/heatmap_{name}.png"
+#)
