@@ -2,12 +2,9 @@ import argparse
 import csv
 import subprocess
 import sys
-import time
-import subprocess
+
 import tobii_research as tr
-
 from utils import get_current_time_iso8601, make_beep
-
 
 """
 Parameters of your own EYE TRACKER
@@ -19,6 +16,7 @@ EYETRACKER_ADDRESS = "tobii-prp://TPNA1-030108540815"
 
 # This list will be filled with dictionaries, with one dictionary per recording sample.
 gaze_data_samples = []
+
 
 def get_eyetracker():
     # Check if a specific eye tracker address has been provided, and if so, try to locate it and return the corresponding eye tracker object.
@@ -36,8 +34,8 @@ def get_eyetracker():
         )
     return all_eyetrackers[0]
 
-def calibrate():
 
+def calibrate():
     command = [
         TETM_PATH,
         f"--device-sn={SERIAL_NUMBER}",
@@ -49,17 +47,16 @@ def calibrate():
 
     if result.returncode == 0:
         print("Calibration completed successfully.")
+        make_beep()
         return True
     else:
         print(f"Calibration failed with exit code {result.returncode}")
         return False
 
 
-
-
 def gaze_data_callback(gaze_data):
     global gaze_data_samples
-    gaze_data['current_time'] = get_current_time_iso8601()
+    gaze_data["current_time"] = get_current_time_iso8601()
     gaze_data_samples.append(gaze_data)
 
 
@@ -70,7 +67,7 @@ def save_gaze_data(gaze_samples_list, name):
 
     # print("Sample dictionary keys:", gaze_samples_list[0].keys())
 
-    file_handle = open(f"eye_trackers/{name}.csv", "w")
+    file_handle = open(f"../data/{name}/gaze.csv", "w")
     gaze_writer = csv.writer(file_handle)
     gaze_writer.writerow(
         ["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"]
@@ -92,9 +89,10 @@ def save_gaze_data(gaze_samples_list, name):
         )
     file_handle.close()
 
+    make_beep()
+
 
 def main():
-
     parser = argparse.ArgumentParser(description="Parameters required for processing.")
     parser.add_argument("duration", type=int, help="total seconds to collect data")
     parser.add_argument("name", type=str, help="name of the output file")
@@ -105,8 +103,6 @@ def main():
 
     if not calibrate():
         return
-        
-    make_beep()
 
     eyetracker = get_eyetracker()
     print(
@@ -114,14 +110,15 @@ def main():
             eyetracker.serial_number
         )
     )
-    
+
     eyetracker.subscribe_to(
         tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True
     )
-    print("antes", get_current_time_iso8601(2))
-    subprocess.run(["python", "screenshot.py", name, str(collection_duration)])
-    print("despues", get_current_time_iso8601(2))
+
     print("Collecting gaze data for {} seconds...".format(collection_duration))
+
+    subprocess.run(["python", "screenshot.py", name, str(collection_duration)])
+
     # time.sleep(collection_duration)
     print(
         "Unsubscribing from gaze data for eye tracker with serial number {0}.".format(

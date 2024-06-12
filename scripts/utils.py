@@ -1,7 +1,8 @@
-from datetime import datetime, timezone, timedelta
 import winsound
+from datetime import datetime, timedelta, timezone
 
-def get_current_time_iso8601(option = 1):
+
+def get_current_time_iso8601(option=1):
     # Get the current time in UTC
     now = datetime.now(timezone.utc)
     # Format the time in ISO 8601 with milliseconds\
@@ -24,13 +25,12 @@ def try_float(value):
 def linear_interpolate(start, end, steps):
     return [(start + (end - start) * i / steps) for i in range(1, steps)]
 
+
 def make_beep():
     frequency = 1000  # Set Frequency To 2500 Hertz
     duration_beep = 1000  # Set Duration To 1000 ms == 1 second
     winsound.Beep(frequency, duration_beep)
     return None
-
-
 
 
 def subtract_seconds_from_datetime(datetime_str, seconds_to_subtract):
