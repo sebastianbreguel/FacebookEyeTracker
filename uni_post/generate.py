@@ -3,12 +3,9 @@ import csv
 import subprocess
 import sys
 import time
-import subprocess
 
-from utils import make_beep
 import tobii_research as tr
-
-from utils import get_current_time_iso8601
+from utils import get_current_time_iso8601, make_beep
 
 """
 Parameters of your own EYE TRACKER
@@ -24,7 +21,6 @@ gaze_data_samples = []
 
 
 def calibrate():
-
     command = [
         TETM_PATH,
         f"--device-sn={SERIAL_NUMBER}",
@@ -84,7 +80,6 @@ def save_gaze_data(gaze_samples_list, name):
             10 ** (6)
         )  # convert from microseconds to seconds
 
-
         left_x, left_y = recording_dict["left_gaze_point_on_display_area"]
         right_x, right_y = recording_dict["right_gaze_point_on_display_area"]
         gaze_writer.writerow(
@@ -94,7 +89,6 @@ def save_gaze_data(gaze_samples_list, name):
 
 
 def main():
-
     parser = argparse.ArgumentParser(description="Parameters required for processing.")
     parser.add_argument("duration", type=int, help="total seconds to collect data")
     parser.add_argument("name", type=str, help="name of the output file")

@@ -1,11 +1,13 @@
-from datetime import datetime, timezone
 import winsound
+from datetime import datetime, timezone
+
 
 def make_beep():
     frequency = 1000  # Set Frequency To 2500 Hertz
     duration_beep = 1000  # Set Duration To 1000 ms == 1 second
     winsound.Beep(frequency, duration_beep)
     return None
+
 
 def get_current_time_iso8601():
     # Get the current time in UTC

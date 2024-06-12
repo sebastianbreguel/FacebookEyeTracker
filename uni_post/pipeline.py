@@ -1,5 +1,6 @@
 import argparse
 import os
+
 # run generate.py
 
 
@@ -11,7 +12,7 @@ argpase.add_argument("width", type=int, help="Screen width", default=1920)
 argpase.add_argument("height", type=int, help="Screen height", default=1080)
 
 args = vars(argpase.parse_args())
-duration = args['duration']
+duration = args["duration"]
 name = args["name"]
 width = args["width"]
 height = args["height"]
@@ -25,10 +26,10 @@ input_file = f"gaze/my_gaze_data_{name}"
 
 print("Processing gaze data")
 os.system(
-   f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+    f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
 )
 
 print("Generating heatmap")
 os.system(
-   f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -n 125    -sd 15 -o heatmap/{name}.png"
+    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -n 125    -sd 15 -o heatmap/{name}.png"
 )
