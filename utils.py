@@ -1,11 +1,16 @@
 from datetime import datetime, timezone, timedelta
-def get_current_time_iso8601():
+import winsound
+
+def get_current_time_iso8601(option = 1):
     # Get the current time in UTC
     now = datetime.now(timezone.utc)
-    print(now)
-    print(datetime.now())
-    # Format the time in ISO 8601 with milliseconds
-    formatted_time = now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+    # Format the time in ISO 8601 with milliseconds\
+    if option == 1:
+        formatted_time = now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+    elif option == 2:
+        # for the screenshots
+        formatted_time = now.strftime("%Y-%m-%dT%H_%M_%S")
+
     return formatted_time
 
 
@@ -19,7 +24,11 @@ def try_float(value):
 def linear_interpolate(start, end, steps):
     return [(start + (end - start) * i / steps) for i in range(1, steps)]
 
-
+def make_beep():
+    frequency = 1000  # Set Frequency To 2500 Hertz
+    duration_beep = 1000  # Set Duration To 1000 ms == 1 second
+    winsound.Beep(frequency, duration_beep)
+    return None
 
 
 

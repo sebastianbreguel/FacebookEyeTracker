@@ -3,10 +3,11 @@ import csv
 import subprocess
 import sys
 import time
-
+import subprocess
 import tobii_research as tr
 
-from utils import get_current_time_iso8601
+from utils import get_current_time_iso8601, make_beep
+
 
 """
 Parameters of your own EYE TRACKER
@@ -19,6 +20,21 @@ EYETRACKER_ADDRESS = "tobii-prp://TPNA1-030108540815"
 # This list will be filled with dictionaries, with one dictionary per recording sample.
 gaze_data_samples = []
 
+def get_eyetracker():
+    # Check if a specific eye tracker address has been provided, and if so, try to locate it and return the corresponding eye tracker object.
+    if SERIAL_NUMBER:
+        eyetracker = tr.EyeTracker(EYETRACKER_ADDRESS)
+        if not eyetracker:
+            sys.exit("Specified eye tracker not found, please check the address.")
+        return eyetracker
+    # If we reach this point, no specific address was provided, so return the first found eye tracker.
+    all_eyetrackers = tr.find_all_eyetrackers()
+    if not all_eyetrackers:
+        sys.exit(
+            "No connected eye trackers found. Please check the connection "
+            "and/or install any missing drivers with Tobii Pro Eye Tracker Manager."
+        )
+    return all_eyetrackers[0]
 
 def calibrate():
 
@@ -39,21 +55,6 @@ def calibrate():
         return False
 
 
-def get_eyetracker():
-    # Check if a specific eye tracker address has been provided, and if so, try to locate it and return the corresponding eye tracker object.
-    if SERIAL_NUMBER:
-        eyetracker = tr.EyeTracker(EYETRACKER_ADDRESS)
-        if not eyetracker:
-            sys.exit("Specified eye tracker not found, please check the address.")
-        return eyetracker
-    # If we reach this point, no specific address was provided, so return the first found eye tracker.
-    all_eyetrackers = tr.find_all_eyetrackers()
-    if not all_eyetrackers:
-        sys.exit(
-            "No connected eye trackers found. Please check the connection "
-            "and/or install any missing drivers with Tobii Pro Eye Tracker Manager."
-        )
-    return all_eyetrackers[0]
 
 
 def gaze_data_callback(gaze_data):
@@ -66,9 +67,10 @@ def save_gaze_data(gaze_samples_list, name):
     if not gaze_samples_list:
         print("No gaze samples were collected. Skipping saving")
         return
-    print("Sample dictionary keys:", gaze_samples_list[0].keys())
 
-    file_handle = open(f"my_gaze_data_{name}.csv", "w")
+    # print("Sample dictionary keys:", gaze_samples_list[0].keys())
+
+    file_handle = open(f"eye_trackers/{name}.csv", "w")
     gaze_writer = csv.writer(file_handle)
     gaze_writer.writerow(
         ["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"]
@@ -97,14 +99,14 @@ def main():
     parser.add_argument("duration", type=int, help="total seconds to collect data")
     parser.add_argument("name", type=str, help="name of the output file")
 
-    collection_duration = 20  # seconds
-
     args = vars(parser.parse_args())
     collection_duration = args["duration"]
     name = args["name"]
 
     if not calibrate():
         return
+        
+    make_beep()
 
     eyetracker = get_eyetracker()
     print(
@@ -112,12 +114,15 @@ def main():
             eyetracker.serial_number
         )
     )
-
+    
     eyetracker.subscribe_to(
         tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True
     )
+    print("antes", get_current_time_iso8601(2))
+    subprocess.run(["python", "screenshot.py", name, str(collection_duration)])
+    print("despues", get_current_time_iso8601(2))
     print("Collecting gaze data for {} seconds...".format(collection_duration))
-    time.sleep(collection_duration)
+    # time.sleep(collection_duration)
     print(
         "Unsubscribing from gaze data for eye tracker with serial number {0}.".format(
             eyetracker.serial_number
