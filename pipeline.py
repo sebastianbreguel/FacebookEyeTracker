@@ -21,6 +21,7 @@ input_file = f"data/{name}/gaze"
 
 
 # make folder for the gaze of the user, screenshots and heatmap
+os.makedirs(f"data/{name}/gaze_post", exist_ok=True)
 os.makedirs(f"data/{name}/screenshots", exist_ok=True)
 os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
 print(f"Directories for {name} created successfully.")
