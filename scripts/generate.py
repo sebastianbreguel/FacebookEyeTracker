@@ -67,7 +67,7 @@ def save_gaze_data(gaze_samples_list, name):
 
     # print("Sample dictionary keys:", gaze_samples_list[0].keys())
 
-    file_handle = open(f"../data/{name}/gaze.csv", "w")
+    file_handle = open(f"data/{name}/gaze.csv", "w")
     gaze_writer = csv.writer(file_handle)
     gaze_writer.writerow(
         ["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"]
@@ -117,7 +117,7 @@ def main():
 
     print("Collecting gaze data for {} seconds...".format(collection_duration))
 
-    subprocess.run(["python", "screenshot.py", name, str(collection_duration)])
+    subprocess.run(["python", "scripts/screenshot.py", name, str(collection_duration)])
 
     # time.sleep(collection_duration)
     print(

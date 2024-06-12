@@ -17,25 +17,23 @@ height = args["height"]
 base = "images/image.png"
 
 # input for the processing
-input_file = f"../data/{name}/gaze/{name}"
+input_file = f"data/{name}/gaze"
 
 
-# creating folder for this user
-os.system(f"mkdir ../data/{name}")
-# make ra_gaze folder for that person, screenshots, heatmaps and gaze_cleanded
-os.system(f"mkdir ../data/{name}/gaze")
-os.system(f"mkdir ../data/{name}/screenshots")
-os.system(f"mkdir ../data/{name}/heatmaps")
+# make folder for the gaze of the user, screenshots and heatmap
+os.makedirs(f"data/{name}/screenshots", exist_ok=True)
+os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
+print(f"Directories for {name} created successfully.")
 
 
-# print("Running eye tracker")
-# os.system(f"python generate.py {duration} {name}")
+print("Running eye tracker")
+os.system(f"python scripts/generate.py {duration} {name}")
 
 
-# print("Processing gaze data")
-# os.system(
-#     f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-# )
+print("Processing gaze data")
+os.system(
+    f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+)
 
 
 # print("Generating heatmap")
