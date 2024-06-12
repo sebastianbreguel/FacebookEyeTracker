@@ -1,6 +1,6 @@
 import argparse
 import os
-
+import winsound
 # run generate.py
 
 
@@ -21,6 +21,9 @@ base = "images/image.png"
 # input for the processing
 input_file = f"my_gaze_data_{name}"
 
+frequency = 2500  # Set Frequency To 2500 Hertz
+duration = 1000  # Set Duration To 1000 ms == 1 second
+winsound.Beep(frequency, duration)
 print("Runnign eye tracker")
 print("asdasd")
 # os.system(f'python generate.py {duration} {name}')
@@ -30,6 +33,10 @@ print("asdasd")
 os.system(
    f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
 )
+
+frequency = 2500  # Set Frequency To 2500 Hertz
+duration = 1000  # Set Duration To 1000 ms == 1 second
+winsound.Beep(frequency, duration)
 
 # print("Generating heatmap")
 #os.system(
