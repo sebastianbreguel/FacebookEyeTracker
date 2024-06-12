@@ -14,7 +14,7 @@
 
 # Project structure:
 
-
+```
 ├── pipeline.py
 |
 ├── scripts/
@@ -40,3 +40,4 @@
 │   ├── gaze_clean.csv
 |   |
 │   └── ...
+```
