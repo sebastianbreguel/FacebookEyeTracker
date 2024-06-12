@@ -19,17 +19,17 @@ height = args["height"]
 base = "images/image.png"
 
 # input for the processing
-input_file = f"eye_trackers/my_gaze_data_{name}"
+input_file = f"my_gaze_data_{name}"
 
-# print("Runnign eye tracker")
+print("Runnign eye tracker")
 print("asdasd")
-os.system(f'python generate.py {duration} {name}')
+# os.system(f'python generate.py {duration} {name}')
 
 print("asdasd")
 # print("Processing gaze data")
-#os.system(
-#    f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-#)
+os.system(
+   f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+)
 
 # print("Generating heatmap")
 #os.system(

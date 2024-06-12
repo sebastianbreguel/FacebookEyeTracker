@@ -53,8 +53,6 @@ def process_nans(rows, output_file):
     problems = []
     is_in_nans = False
     sub = []
-    max_time = int(float(rows[-1]["time_seconds"]))
-    min_iso_time = rows[0]["current_time"]
 
 
     for index in range(len(rows)):
@@ -74,6 +72,7 @@ def process_nans(rows, output_file):
 
     if problems and problems[0][0] == -1:
         start = problems.pop(0)
+        min_time = rows[start[-1]]["time_seconds"]
 
     for i in range(len(problems)):
         before = problems[i][0]
@@ -99,8 +98,7 @@ def process_nans(rows, output_file):
             if index < start[1]:
                 continue
             row = rows[index]
-            time_actual = max_time - int(float(row['time_seconds']))
-            row["current_time"] = subtract_seconds_from_datetime(min_iso_time, time_actual)
+            row['time_seconds'] = float(row['time_seconds']) - float(min_time)
             writer.writerow(row)
 
 

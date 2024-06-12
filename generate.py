@@ -11,7 +11,8 @@ from utils import get_current_time_iso8601
 """
 Parameters of your own EYE TRACKER
 """
-TETM_PATH = "C:/Users/jconc/AppData/Local/Programs/TobiiProEyeTrackerManager/TobiiProEyeTrackerManager.exe"
+user = "Nelson Breguel"
+TETM_PATH = f"C:/Users/{user}/AppData/Local/Programs/TobiiProEyeTrackerManager/TobiiProEyeTrackerManager.exe"
 SERIAL_NUMBER = "TPNA1-030108540815"
 EYETRACKER_ADDRESS = "tobii-prp://TPNA1-030108540815"
 
@@ -25,7 +26,7 @@ def calibrate():
         TETM_PATH,
         f"--device-sn={SERIAL_NUMBER}",
         "--mode=usercalibration",
-        "--screen=2",
+        "--screen=1",
     ]
 
     result = subprocess.run(command, capture_output=True, text=True)
@@ -57,6 +58,7 @@ def get_eyetracker():
 
 def gaze_data_callback(gaze_data):
     global gaze_data_samples
+    gaze_data['current_time'] = get_current_time_iso8601()
     gaze_data_samples.append(gaze_data)
 
 
@@ -79,7 +81,7 @@ def save_gaze_data(gaze_samples_list, name):
             10 ** (6)
         )  # convert from microseconds to seconds
 
-        current_time = get_current_time_iso8601()
+        current_time = recording_dict["current_time"]
 
         left_x, left_y = recording_dict["left_gaze_point_on_display_area"]
         right_x, right_y = recording_dict["right_gaze_point_on_display_area"]
