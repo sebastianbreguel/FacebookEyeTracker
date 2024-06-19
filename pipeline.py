@@ -22,13 +22,14 @@ input_file = f"data/{name}/gaze"
 
 # make folder for the gaze of the user, screenshots and heatmap
 os.makedirs(f"data/{name}/gaze_post", exist_ok=True)
+os.makedirs(f"data/{name}/times", exist_ok=True)
 os.makedirs(f"data/{name}/screenshots", exist_ok=True)
 os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
 print(f"Directories for {name} created successfully.")
 
 
-print("Running eye tracker")
-os.system(f"python scripts/generate.py {duration} {name}")
+# print("Running eye tracker")
+# os.system(f"python scripts/generate.py {duration} {name}")
 
 
 print("Processing gaze data")
@@ -37,7 +38,12 @@ os.system(
 )
 
 
-# print("Generating heatmap")
+# print("Processing gaze data")
 # os.system(
-#    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -o images/heatmap_{name}.png"
+#     f"python scripts/request.py {name}"
 # )
+
+print("Generating heatmap")
+os.system(
+   f"python scripts/gazeHeatplot.py {input_file}_clean.csv {width} {height} -b {base} -o images/heatmap_{name}.png"
+)

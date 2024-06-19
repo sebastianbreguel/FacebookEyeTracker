@@ -6,7 +6,7 @@ import pyautogui
 
 
 def screenshot(name, duration):
-    time.sleep(3)
+    time.sleep(5)
     target_folder = f"images"
 
     screenshot_path = os.path.join(target_folder, f"{name}.png")
@@ -14,7 +14,7 @@ def screenshot(name, duration):
     screenshot.save(screenshot_path)
 
     print(f"Screenshot saved to {screenshot_path}")
-    time.sleep(duration - 3)
+    time.sleep(duration - 5)
 
 
 if __name__ == "__main__":
