@@ -17,7 +17,12 @@ def load_json_data(file_path):
 def process_gaze_data(df, json_data):
     #Step 1: initial date and first time
     initial_date = datetime.strptime(json_data[0]["initialDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    last_time_seconds = df[df["current_time"] - initial_date < timedelta(seconds=0)]["time_seconds"].iloc[-1]
+    last_time_seconds = df[df["current_time"] - initial_date < timedelta(seconds=0)]
+    if last_time_seconds.empty:
+        less = df["current_time"].loc[0]
+        last_time_seconds = -abs(less - initial_date).total_seconds()
+    else:
+        last_time_seconds = last_time_seconds["time_seconds"].iloc[-1]
 
     # Step 2: Remove all rows where `time_seconds` is less than 0
     df["time_seconds"] = df["time_seconds"] - last_time_seconds
@@ -37,6 +42,7 @@ def process_gaze_data(df, json_data):
 
     #Step 4: Remove all rows where `postID` is None
     df = df[df["postID"].notna()].reset_index(drop=True)
+    print("dataframe filtered", df)
     return df
 
 def process_screenshots(screenshots_folder, json_data):
@@ -91,9 +97,8 @@ def save_split_files(df, output_folder, name):
     print(f'Archivos CSV creados en la carpeta {output_folder}')
 
 def create_heatmaps(unique_post_ids, width, height, name, root):
-
     for post_id in unique_post_ids:
-        df_file = pd.read_csv(f"gaze_posts/{name}_gaze_{post_id}.csv")
+        df_file = pd.read_csv(root+f"gaze_posts/{name}_gaze_{post_id}.csv")
         input_csv = root + f"gaze_posts/{name}_gaze_{post_id}.csv"
         image_screenshot = root + f"screenshots/{df_file['screenshot_filename'].iloc[0]}"
         heatmap_file = root + f"heatmaps/{name}_heatmap_{post_id}.png"
@@ -119,7 +124,7 @@ def main():
     df = process_gaze_data(df, json_data)
     screenshot_df = process_screenshots(screenshot_folder, json_data)
     df = assign_screenshot_filenames(df, screenshot_df)
-    save_split_files(df, 'gaze_posts/', name)
+    save_split_files(df, root+'gaze_posts/', name)
     unique_post_ids = df['postID'].unique()
 
     create_heatmaps(unique_post_ids, width=1920, height=1080, name=name, root=root)

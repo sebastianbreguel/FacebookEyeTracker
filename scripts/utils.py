@@ -1,4 +1,4 @@
-# import winsound
+import winsound
 from datetime import datetime, timedelta, timezone
 
 
@@ -27,9 +27,9 @@ def linear_interpolate(start, end, steps):
 
 
 def make_beep():
-    # frequency = 1000  # Set Frequency To 2500 Hertz
-    # duration_beep = 1000  # Set Duration To 1000 ms == 1 second
-    # winsound.Beep(frequency, duration_beep)
+    frequency = 1000  # Set Frequency To 2500 Hertz
+    duration_beep = 1000  # Set Duration To 1000 ms == 1 second
+    winsound.Beep(frequency, duration_beep)
     return None
 
 

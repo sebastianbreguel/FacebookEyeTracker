@@ -29,8 +29,8 @@ os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
 print(f"Directories for {name} created successfully.")
 
 
-# print("Running eye tracker")
-# os.system(f"python scripts/generate.py {duration} {name}")
+print("Running eye tracker")
+os.system(f"python scripts/generate.py {duration} {name}")
 
 
 print("Processing gaze data")
@@ -38,12 +38,12 @@ os.system(
     f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
 )
 
-# time.sleep(5)
+time.sleep(5)
 
-# print("Processing gaze data")
-# os.system(
-#     f"python scripts/request.py zx\\zx"
-# )
+print("Processing gaze data")
+os.system(
+    f"python scripts/request.py {name}"
+)
 
 print("Generating heatmap")
 os.system(
