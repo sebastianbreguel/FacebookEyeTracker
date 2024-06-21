@@ -1,0 +1,67 @@
+[
+{
+    "userName": "sebastian",
+    "postID": 3,
+    "truth": 1,
+    "confidence": -1,
+    "initialDate": "2024-06-21T04:16:23.991Z",
+    "PostStartTime": 0.215,
+    "PostEndTime": 11.236,
+    "PostTimeSpent": 11.021,
+    "SurveyStartTime": 11.25,
+    "SurveyEndTime": 13.838,
+    "SurveyTimeSpent": 2.587999999999999
+  },
+  {
+    "userName": "sebastian",
+    "postID": 6,
+    "truth": 2,
+    "confidence": -1,
+    "initialDate": "2024-06-21T04:16:23.991Z",
+    "PostStartTime": 14.223,
+    "PostEndTime": 27.438,
+    "PostTimeSpent": 13.214999999999998,
+    "SurveyStartTime": 27.444,
+    "SurveyEndTime": 29.81,
+    "SurveyTimeSpent": 2.3659999999999997
+  },
+  {
+    "userName": "sebastian",
+    "postID": 2,
+    "truth": -3,
+    "confidence": 2,
+    "initialDate": "2024-06-21T04:16:23.991Z",
+    "PostStartTime": 29.893,
+    "PostEndTime": 41.828,
+    "PostTimeSpent": 11.935000000000002,
+    "SurveyStartTime": 41.833,
+    "SurveyEndTime": 44.692,
+    "SurveyTimeSpent": 2.8590000000000018
+  },
+  {
+    "userName": "sebastian",
+    "postID": 5,
+    "truth": 1,
+    "confidence": -2,
+    "initialDate": "2024-06-21T04:16:23.991Z",
+    "PostStartTime": 44.75,
+    "PostEndTime": 51.576,
+    "PostTimeSpent": 6.8260000000000005,
+    "SurveyStartTime": 51.581,
+    "SurveyEndTime": 53.739,
+    "SurveyTimeSpent": 2.157999999999994
+  },
+  {
+    "userName": "sebastian",
+    "postID": 1,
+    "truth": 1,
+    "confidence": -2,
+    "initialDate": "2024-06-21T04:16:23.991Z",
+    "PostStartTime": 53.803,
+    "PostEndTime": 58.508,
+    "PostTimeSpent": 4.705000000000005,
+    "SurveyStartTime": 58.513,
+    "SurveyEndTime": 60.587,
+    "SurveyTimeSpent": 2.074000000000005
+  }
+]

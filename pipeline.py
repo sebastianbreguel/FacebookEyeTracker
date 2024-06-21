@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 
 argpase = argparse.ArgumentParser()
 
@@ -14,7 +15,7 @@ duration = args["duration"]
 name = args["name"]
 width = args["width"]
 height = args["height"]
-base = "images/image.png"
+base = f"data/{name}/screenshots/screenshot_2024-06-21T00_45_29.png"
 
 # input for the processing
 input_file = f"data/{name}/gaze"
@@ -32,18 +33,19 @@ print(f"Directories for {name} created successfully.")
 # os.system(f"python scripts/generate.py {duration} {name}")
 
 
-print("Processing gaze data")
-os.system(
-    f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-)
-
-
 # print("Processing gaze data")
 # os.system(
-#     f"python scripts/request.py {name}"
+#     f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
 # )
 
-print("Generating heatmap")
+# time.sleep(5)
+
+print("Processing gaze data")
 os.system(
-   f"python scripts/gazeHeatplot.py {input_file}_clean.csv {width} {height} -b {base} -o images/heatmap_{name}.png"
+    f"python scripts/request.py zx\\zx"
 )
+
+# print("Generating heatmap")
+# os.system(
+#    f"python scripts/gazeHeatplot.py {input_file}_clean.csv {width} {height} -b {base} -o data/{name}/heatmaps/heatmap_{name}.png"
+# )
