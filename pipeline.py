@@ -22,7 +22,7 @@ input_file = f"data/{name}/gaze"
 
 
 # make folder for the gaze of the user, screenshots and heatmap
-os.makedirs(f"data/{name}/gaze_post", exist_ok=True)
+os.makedirs(f"data/{name}/gaze_posts", exist_ok=True)
 os.makedirs(f"data/{name}/times", exist_ok=True)
 os.makedirs(f"data/{name}/screenshots", exist_ok=True)
 os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
@@ -33,19 +33,19 @@ print(f"Directories for {name} created successfully.")
 # os.system(f"python scripts/generate.py {duration} {name}")
 
 
-# print("Processing gaze data")
-# os.system(
-#     f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-# )
+print("Processing gaze data")
+os.system(
+    f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+)
 
 # time.sleep(5)
 
-print("Processing gaze data")
-os.system(
-    f"python scripts/request.py zx\\zx"
-)
-
-# print("Generating heatmap")
+# print("Processing gaze data")
 # os.system(
-#    f"python scripts/gazeHeatplot.py {input_file}_clean.csv {width} {height} -b {base} -o data/{name}/heatmaps/heatmap_{name}.png"
+#     f"python scripts/request.py zx\\zx"
 # )
+
+print("Generating heatmap")
+os.system(
+   f"python scripts/multiHeatmap.py {name}"
+)
