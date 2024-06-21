@@ -22,7 +22,7 @@ base = f"images/{name}.png"
 input_file = f"gaze/my_gaze_data_{name}"
 
 print("Runnign eye tracker")
-os.system(f'python generate.py {duration} {name}')
+os.system(f"python generate.py {duration} {name}")
 
 print("Processing gaze data")
 os.system(

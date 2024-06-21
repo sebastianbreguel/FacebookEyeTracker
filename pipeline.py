@@ -41,11 +41,7 @@ os.system(
 time.sleep(5)
 
 print("Processing gaze data")
-os.system(
-    f"python scripts/request.py {name}"
-)
+os.system(f"python scripts/request.py {name}")
 
 print("Generating heatmap")
-os.system(
-   f"python scripts/multiHeatmap.py {name}"
-)
+os.system(f"python scripts/multiHeatmap.py {name}")

@@ -103,7 +103,7 @@ def process_nans(rows, output_file):
             row["y"] = int(y[j - 1])
 
     with open(output_file, mode="w", newline="") as outfile:
-        fieldnames = ["x", "y","time_seconds", "current_time"]
+        fieldnames = ["x", "y", "time_seconds", "current_time"]
 
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
