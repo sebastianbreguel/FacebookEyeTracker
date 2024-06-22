@@ -71,6 +71,8 @@ def process_screenshots(screenshots_folder, json_data):
             "screenshot_time": screenshot_time,
             "postID": assigned_post_id
         })
+
+    print(screenshot_assignments)
     
     #Step 3: Create a DataFrame with the assignments
     screenshot_df = pd.DataFrame(screenshot_assignments)
@@ -92,6 +94,8 @@ def save_split_files(df, output_folder, name):
     for post_id in unique_post_ids:
         df_filtered = df[df['postID'] == post_id]
         filename = f'{name}_gaze_{post_id}.csv'
+        df_filtered["x"] = df_filtered["x"].astype(int)
+        df_filtered["y"] = df_filtered["y"].astype(int)
         df_filtered.to_csv(os.path.join(output_folder, filename), index=False)
     
     print(f'Archivos CSV creados en la carpeta {output_folder}')

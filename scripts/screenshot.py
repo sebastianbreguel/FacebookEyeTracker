@@ -6,7 +6,8 @@ import pyautogui
 from utils import get_current_time_iso8601
 
 
-def take_screenshots(name, duration, slots=5):
+def take_screenshots(name, duration, slots=3):
+    time.sleep(5)
     print(duration, slots, int(duration/slots))
     screenshot(name, 0)
     for _ in range(1, int(duration / slots) + 1):
