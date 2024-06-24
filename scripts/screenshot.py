@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-
 import pyautogui
 from utils import get_current_time_iso8601
 

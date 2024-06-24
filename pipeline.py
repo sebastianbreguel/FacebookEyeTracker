@@ -26,22 +26,23 @@ os.makedirs(f"data/{name}/gaze_posts", exist_ok=True)
 os.makedirs(f"data/{name}/times", exist_ok=True)
 os.makedirs(f"data/{name}/screenshots", exist_ok=True)
 os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
+os.makedirs(f"data/{name}/scanpath", exist_ok=True)
 print(f"Directories for {name} created successfully.")
 
 
-print("Running eye tracker")
-os.system(f"python scripts/generate.py {duration} {name}")
+# print("Running eye tracker")
+# os.system(f"python scripts/generate.py {duration} {name}")
 
 
-print("Processing gaze data")
-os.system(
-    f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-)
+# print("Processing gaze data")
+# os.system(
+#     f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+# )
 
-time.sleep(5)
 
-print("Processing gaze data")
-os.system(f"python scripts/request.py {name}")
 
-print("Generating heatmap")
-os.system(f"python scripts/multiHeatmap.py {name}")
+# print("Matching data with json files")
+# os.system(f"python scripts/match.py {name}")
+
+print("Generating visualizations")
+os.system(f"python scripts/visualizations.py {name}")
