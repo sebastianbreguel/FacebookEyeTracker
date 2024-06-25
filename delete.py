@@ -1,7 +1,16 @@
 import os
 
 # Specify the directory where the files are located
-names = ["cristobal", "david", "diego", "gabriel", "isidora", "javier", "magdalena", "porte"]
+names = [
+    "cristobal",
+    "david",
+    "diego",
+    "gabriel",
+    "isidora",
+    "javier",
+    "magdalena",
+    "porte",
+]
 
 for name in names:
     folder_path = f"data/{name}/screenshots"

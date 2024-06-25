@@ -2,20 +2,18 @@ import argparse
 import json
 import os
 from datetime import datetime, timedelta
-import requests
 
 import pandas as pd
+import requests
 
 
 def download_and_filter_json(user_name, root):
-
-    
-    path = f"{root}/times/"+user_name+"_posts_times.json"
+    path = f"{root}/times/" + user_name + "_posts_times.json"
     url = "http://localhost:3001/download/answersPostsAndSurvey"
 
     if os.path.isfile(path):
         return
-    
+
     try:
         response = requests.get(url)
         response.raise_for_status()  # Verifica si hubo algún error en la solicitud
@@ -30,9 +28,7 @@ def download_and_filter_json(user_name, root):
             if entry.get("userName").lower() == (user_name).lower()
         ]
         # Guarda el contenido filtrado en un archivo JSON
-        with open(
-            path, "w", encoding="utf-8"
-        ) as file:
+        with open(path, "w", encoding="utf-8") as file:
             json.dump(filtered_data, file, ensure_ascii=False, indent=4)
 
         print(f"Filtered file saved as {user_name}")
@@ -40,6 +36,7 @@ def download_and_filter_json(user_name, root):
         print(f"Error during request: {e}")
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
+
 
 def load_gaze_data(file_path):
     df = pd.read_csv(file_path)
@@ -91,7 +88,6 @@ def process_gaze_data(df, json_data):
 
 
 def process_screenshots(screenshots_folder, json_data):
-
     # Step 1: Get the list of screenshot files
     screenshot_files = os.listdir(screenshots_folder)
     screenshot_files = [file for file in screenshot_files if file.endswith(".png")]
@@ -145,8 +141,8 @@ def save_split_files(df, output_folder, name):
     unique_post_ids = df["postID"].unique()
 
     for post_id in unique_post_ids:
-        df_filtered = df[df['postID'] == post_id]
-        filename = f'{name}_gaze_{post_id}.csv'
+        df_filtered = df[df["postID"] == post_id]
+        filename = f"{name}_gaze_{post_id}.csv"
         df_filtered["x"] = df_filtered["x"].astype(int)
         df_filtered["y"] = df_filtered["y"].astype(int)
         df_filtered.to_csv(os.path.join(output_folder, filename), index=False)
@@ -167,10 +163,8 @@ def collect_screenshots(unique_post_ids, name, root):
         if os.path.exists(image_screenshot):
             os.rename(image_screenshot, new_screenshot_path)
 
+
 def main():
-
-
-
     argpase = argparse.ArgumentParser()
 
     argpase.add_argument("name", type=str, help="total seconds to collect data")
@@ -192,8 +186,6 @@ def main():
     save_split_files(df, root + "gaze_posts/", name)
     unique_post_ids = df["postID"].unique()
     collect_screenshots(unique_post_ids, name=name, root=root)
-
-
 
 
 if __name__ == "__main__":

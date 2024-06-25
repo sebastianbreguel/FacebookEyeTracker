@@ -22,21 +22,19 @@ def load_json_data(file_path):
 
 def extract_number_simple(filename):
     # Split by underscore and take the second last element (index -2)
-    parts = filename.split('_')
+    parts = filename.split("_")
     # Remove the '.csv' and convert to integer
-    number = int(parts[-1].replace('.csv', ''))
+    number = int(parts[-1].replace(".csv", ""))
     return number
 
 
 def create_visualizations(unique_post_ids, name, root, width=1920, height=1080):
-
     for post_id in unique_post_ids:
         input_csv = root + f"gaze_posts/{name}_gaze_{post_id}.csv"
         screenshot_path = root + f"screenshots/{name}_screenshot_{post_id}.png"
 
-
         heatmap_file = root + f"heatmaps/{name}_heatmap_{post_id}.png"
-        scanpath_file = root +f"scanpath/{name}_scanpath_{post_id}.png"
+        scanpath_file = root + f"scanpath/{name}_scanpath_{post_id}.png"
 
         os.system(
             f"python scripts/visualizations/gazeHeatplot.py {input_csv} {width} {height} -b {screenshot_path} -o {heatmap_file}"
@@ -45,7 +43,6 @@ def create_visualizations(unique_post_ids, name, root, width=1920, height=1080):
         os.system(
             f"python scripts/visualizations/scanpathPlot.py -g {input_csv} -i {screenshot_path} -o {scanpath_file}"
         )
-
 
 
 def main():
@@ -57,13 +54,12 @@ def main():
 
     root = f"data/{name}/"
 
-
-    post_files = os.listdir(root+f"gaze_posts")
+    post_files = os.listdir(root + f"gaze_posts")
     unique_post_ids = []
     for post_file in post_files:
         number = extract_number_simple(post_file)
         unique_post_ids.append(number)
-    
+
     create_visualizations(unique_post_ids, name, root)
 
 

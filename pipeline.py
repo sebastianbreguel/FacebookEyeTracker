@@ -40,7 +40,6 @@ print(f"Directories for {name} created successfully.")
 # )
 
 
-
 # print("Matching data with json files")
 # os.system(f"python scripts/match.py {name}")
 
