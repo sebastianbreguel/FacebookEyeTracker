@@ -10,6 +10,7 @@ names = [
     "javier",
     "magdalena",
     "porte",
+    "diego_p",
 ]
 
 for name in names:

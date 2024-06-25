@@ -30,14 +30,14 @@ os.makedirs(f"data/{name}/scanpath", exist_ok=True)
 print(f"Directories for {name} created successfully.")
 
 
-print("Running eye tracker")
-os.system(f"python scripts/generate.py {duration} {name}")
+# print("Running eye tracker")
+# os.system(f"python scripts/generate.py {duration} {name}")
 
 
-print("Processing gaze data")
-os.system(
-    f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-)
+# print("Processing gaze data")
+# os.system(
+#     f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
+# )
 
 
 print("Matching data with json files")
