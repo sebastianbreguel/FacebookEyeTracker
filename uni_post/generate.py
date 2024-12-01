@@ -48,10 +48,7 @@ def get_eyetracker():
     # If we reach this point, no specific address was provided, so return the first found eye tracker.
     all_eyetrackers = tr.find_all_eyetrackers()
     if not all_eyetrackers:
-        sys.exit(
-            "No connected eye trackers found. Please check the connection "
-            "and/or install any missing drivers with Tobii Pro Eye Tracker Manager."
-        )
+        sys.exit("No connected eye trackers found. Please check the connection " "and/or install any missing drivers with Tobii Pro Eye Tracker Manager.")
     return all_eyetrackers[0]
 
 
@@ -68,23 +65,17 @@ def save_gaze_data(gaze_samples_list, name):
 
     file_handle = open(f"gaze/my_gaze_data_{name}.csv", "w")
     gaze_writer = csv.writer(file_handle)
-    gaze_writer.writerow(
-        ["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"]
-    )
+    gaze_writer.writerow(["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"])
     current_time = get_current_time_iso8601()
     start_time = gaze_samples_list[0]["system_time_stamp"]
     for recording_dict in gaze_samples_list:
         sample_time_from_start = recording_dict["system_time_stamp"] - start_time
 
-        sample_time_from_start = sample_time_from_start / (
-            10 ** (6)
-        )  # convert from microseconds to seconds
+        sample_time_from_start = sample_time_from_start / (10 ** (6))  # convert from microseconds to seconds
 
         left_x, left_y = recording_dict["left_gaze_point_on_display_area"]
         right_x, right_y = recording_dict["right_gaze_point_on_display_area"]
-        gaze_writer.writerow(
-            [sample_time_from_start, current_time, left_x, left_y, right_x, right_y]
-        )
+        gaze_writer.writerow([sample_time_from_start, current_time, left_x, left_y, right_x, right_y])
     file_handle.close()
 
 
@@ -103,24 +94,14 @@ def main():
         return
 
     eyetracker = get_eyetracker()
-    print(
-        "Subscribing to gaze data for eye tracker with serial number {0}.".format(
-            eyetracker.serial_number
-        )
-    )
+    print("Subscribing to gaze data for eye tracker with serial number {0}.".format(eyetracker.serial_number))
     make_beep()
-    eyetracker.subscribe_to(
-        tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True
-    )
+    eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, gaze_data_callback, as_dictionary=True)
 
     print("Collecting gaze data for {} seconds...".format(collection_duration))
 
     subprocess.run(["python", "screenshot.py", name, str(collection_duration)])
-    print(
-        "Unsubscribing from gaze data for eye tracker with serial number {0}.".format(
-            eyetracker.serial_number
-        )
-    )
+    print("Unsubscribing from gaze data for eye tracker with serial number {0}.".format(eyetracker.serial_number))
 
     eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, gaze_data_callback)
     save_gaze_data(gaze_data_samples, name)

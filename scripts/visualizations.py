@@ -8,9 +8,7 @@ import pandas as pd
 
 def load_gaze_data(file_path):
     df = pd.read_csv(file_path)
-    df["current_time"] = pd.to_datetime(
-        df["current_time"], format="%Y-%m-%dT%H:%M:%S.%fZ"
-    )
+    df["current_time"] = pd.to_datetime(df["current_time"], format="%Y-%m-%dT%H:%M:%S.%fZ")
     return df
 
 
@@ -36,13 +34,9 @@ def create_visualizations(unique_post_ids, name, root, width=1920, height=1080):
         heatmap_file = root + f"heatmaps/{name}_heatmap_{post_id}.png"
         scanpath_file = root + f"scanpath/{name}_scanpath_{post_id}.png"
 
-        os.system(
-            f"python scripts/visualizations/gazeHeatplot.py {input_csv} {width} {height} -b {screenshot_path} -o {heatmap_file}"
-        )
+        os.system(f"python scripts/visualizations/gazeHeatplot.py {input_csv} {width} {height} -b {screenshot_path} -o {heatmap_file}")
 
-        os.system(
-            f"python scripts/visualizations/scanpathPlot.py -g {input_csv} -i {screenshot_path} -o {scanpath_file}"
-        )
+        os.system(f"python scripts/visualizations/scanpathPlot.py -g {input_csv} -i {screenshot_path} -o {scanpath_file}")
 
 
 def main():

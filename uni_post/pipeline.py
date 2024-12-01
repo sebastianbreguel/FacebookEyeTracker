@@ -25,11 +25,7 @@ print("Runnign eye tracker")
 os.system(f"python generate.py {duration} {name}")
 
 print("Processing gaze data")
-os.system(
-    f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-)
+os.system(f"python gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}")
 
 print("Generating heatmap")
-os.system(
-    f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -n 125    -sd 15 -o heatmap/{name}.png"
-)
+os.system(f"python gazeheatplot.py {input_file}_clean.csv {width} {height} -b {base} -n 125    -sd 15 -o heatmap/{name}.png")

@@ -14,9 +14,7 @@ def process_gaze_data(input_file, output_file, width, height):
     Read the data obtained by the generate.py 
     clean the data, avergae left and right and int values
     """
-    with open(input_file, mode="r") as infile, open(
-        output_file, mode="w", newline=""
-    ) as outfile:
+    with open(input_file, mode="r") as infile, open(output_file, mode="w", newline="") as outfile:
         reader = csv.DictReader(infile)
         # fieldnames = ['time_seconds',"current_time", 'x', 'y']
         fieldnames = ["time_seconds", "x", "y"]
@@ -32,12 +30,7 @@ def process_gaze_data(input_file, output_file, width, height):
             right_x = try_float(row["right_x"])
             right_y = try_float(row["right_y"])
 
-            if (
-                math.isnan(left_x)
-                or math.isnan(left_y)
-                or math.isnan(right_x)
-                or math.isnan(right_y)
-            ):
+            if math.isnan(left_x) or math.isnan(left_y) or math.isnan(right_x) or math.isnan(right_y):
                 continue
 
             partial.append(
@@ -89,16 +82,8 @@ def process_gaze_data(input_file, output_file, width, height):
             if math.isnan(right_y) and not math.isnan(left_y):
                 right_y = np.random.normal(left_y, std_abs_diff_y)
 
-            avg_x = (
-                int((left_x + right_x) / 2 * width)
-                if not math.isnan(left_x)
-                else right_y
-            )
-            avg_y = (
-                int((left_y + right_y) / 2 * height)
-                if not math.isnan(left_y)
-                else right_y
-            )
+            avg_x = int((left_x + right_x) / 2 * width) if not math.isnan(left_x) else right_y
+            avg_y = int((left_y + right_y) / 2 * height) if not math.isnan(left_y) else right_y
 
             rows.append(
                 {
@@ -145,12 +130,8 @@ def process_nans(rows, output_file, std_abs_diff_x, std_abs_diff_y):
         reader_after = rows[after]
         distance = after - before
 
-        x = linear_interpolate(
-            try_float(reader_before["x"]), try_float(reader_after["x"]), distance
-        )
-        y = linear_interpolate(
-            try_float(reader_before["y"]), try_float(reader_after["y"]), distance
-        )
+        x = linear_interpolate(try_float(reader_before["x"]), try_float(reader_after["x"]), distance)
+        y = linear_interpolate(try_float(reader_before["y"]), try_float(reader_after["y"]), distance)
 
         for j in range(1, distance):
             row = rows[before + j]

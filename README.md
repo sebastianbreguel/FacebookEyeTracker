@@ -9,7 +9,7 @@
 
 - [x] make a pipeline to request the data from the json of the backend
 - [x] File that process everything and filter the values
-- [ ] File that make a video of the eye tracking on each image
+- [x] File that make a video of the eye tracking on each image
 
 # Project structure:
 
@@ -42,3 +42,9 @@
 |   |
 │   └── ...
 ```
+
+# Example of the generations
+
+![Example of the generations](https://github.com/sebastianbreguel/FacebookEyeTracker/tree/main/data/nn/heatmaps/nn_heatmap_0.png)
+
+![Example of the generations](https://github.com/sebastianbreguel/FacebookEyeTracker/tree/main/data/nn/scanpath/nn_scanpath_0.png)

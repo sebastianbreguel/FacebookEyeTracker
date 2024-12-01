@@ -22,11 +22,7 @@ def download_and_filter_json(user_name, root):
         data = response.json()
 
         # Procesa el contenido JSON filtrando por nombre de usuario
-        filtered_data = [
-            entry
-            for entry in data
-            if entry.get("userName").lower() == (user_name).lower()
-        ]
+        filtered_data = [entry for entry in data if entry.get("userName").lower() == (user_name).lower()]
         # Guarda el contenido filtrado en un archivo JSON
         with open(path, "w", encoding="utf-8") as file:
             json.dump(filtered_data, file, ensure_ascii=False, indent=4)
@@ -40,9 +36,7 @@ def download_and_filter_json(user_name, root):
 
 def load_gaze_data(file_path):
     df = pd.read_csv(file_path)
-    df["current_time"] = pd.to_datetime(
-        df["current_time"], format="%Y-%m-%dT%H:%M:%S.%fZ"
-    )
+    df["current_time"] = pd.to_datetime(df["current_time"], format="%Y-%m-%dT%H:%M:%S.%fZ")
     return df
 
 
@@ -54,9 +48,7 @@ def load_json_data(file_path):
 
 def process_gaze_data(df, json_data):
     # Step 1: initial date and first time
-    initial_date = datetime.strptime(
-        json_data[0]["initialDate"], "%Y-%m-%dT%H:%M:%S.%fZ"
-    )
+    initial_date = datetime.strptime(json_data[0]["initialDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
     last_time_seconds = df[df["current_time"] - initial_date < timedelta(seconds=0)]
     if last_time_seconds.empty:
         less = df["current_time"].loc[0]
@@ -76,8 +68,7 @@ def process_gaze_data(df, json_data):
         post_id = obj["postID"]
 
         df.loc[
-            (df["time_seconds"] >= post_start_time)
-            & (df["time_seconds"] <= post_end_time),
+            (df["time_seconds"] >= post_start_time) & (df["time_seconds"] <= post_end_time),
             "postID",
         ] = post_id
 
@@ -95,15 +86,11 @@ def process_screenshots(screenshots_folder, json_data):
 
     # Step 2: Assign postID based on screenshot timestamp
     for file in screenshot_files:
-        timestamp_str = (
-            file.replace("screenshot_", "").replace(".png", "").replace("_", ":")
-        )
+        timestamp_str = file.replace("screenshot_", "").replace(".png", "").replace("_", ":")
         screenshot_time = datetime.strptime(timestamp_str, "%Y-%m-%dT%H:%M:%S")
         assigned_post_id = None
         for obj in json_data:
-            initial_date = datetime.strptime(
-                obj["initialDate"], "%Y-%m-%dT%H:%M:%S.%fZ"
-            )
+            initial_date = datetime.strptime(obj["initialDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
             post_start_time = initial_date + timedelta(seconds=obj["PostStartTime"])
             post_end_time = initial_date + timedelta(seconds=obj["PostEndTime"])
 
@@ -121,9 +108,7 @@ def process_screenshots(screenshots_folder, json_data):
 
     # Step 3: Create a DataFrame with the assignments
     screenshot_df = pd.DataFrame(screenshot_assignments)
-    screenshot_df = screenshot_df[screenshot_df["postID"].notna()].reset_index(
-        drop=True
-    )
+    screenshot_df = screenshot_df[screenshot_df["postID"].notna()].reset_index(drop=True)
     screenshot_df = screenshot_df.drop_duplicates(subset="postID", keep="first")
     screenshot_df.sort_values(by="screenshot_time", inplace=True)
     return screenshot_df
@@ -153,9 +138,7 @@ def save_split_files(df, output_folder, name):
 def collect_screenshots(unique_post_ids, name, root):
     for post_id in unique_post_ids:
         df_file = pd.read_csv(root + f"gaze_posts/{name}_gaze_{post_id}.csv")
-        image_screenshot = (
-            root + f"screenshots/{df_file['screenshot_filename'].iloc[0]}"
-        )
+        image_screenshot = root + f"screenshots/{df_file['screenshot_filename'].iloc[0]}"
 
         new_screenshot_filename = f"{name}_screenshot_{post_id}.png"
         new_screenshot_path = root + f"screenshots/{new_screenshot_filename}"

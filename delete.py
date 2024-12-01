@@ -2,15 +2,7 @@ import os
 
 # Specify the directory where the files are located
 names = [
-    "cristobal",
-    "david",
-    "diego",
-    "gabriel",
-    "isidora",
-    "javier",
-    "magdalena",
-    "porte",
-    "diego_p",
+    "nn"
 ]
 
 for name in names:

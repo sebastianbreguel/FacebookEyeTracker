@@ -15,8 +15,10 @@ def main(args):
     data = pd.read_csv(args.gaze_csv)
     image = plt.imread(args.image_path)
 
-    x = data["x"]
-    y = data["y"]
+    parts = args.image_path.split("/")
+    name_post_id_part = parts[-1]  # Assumes format is '.../screenshots/{name}_screenshot_{post_id}.png'
+    name_part, _ = name_post_id_part.split("_screenshot_")
+    post_id_part = _.split(".")[0]
 
     fig, ax = plt.subplots(figsize=(8, 6))
     ax.imshow(image)
@@ -69,15 +71,15 @@ def main(args):
     plot_y.append(last_y)
     times.append(accumulated_time if accumulated_time > 0 else 1)
 
+    total_diff = len(plot_x)
+
     # Normalize times for circle sizes
     max_time = max(times) if max(times) > 0 else 1
     sizes = [math.log(time) / math.log(max_time) * 500 for time in times]
 
     # Plot points and lines
     ax.plot(plot_x, plot_y, marker="", linestyle="-", color="red")
-    scatter = ax.scatter(
-        plot_x, plot_y, s=sizes, c="red", alpha=0.5, edgecolors="black"
-    )
+    scatter = ax.scatter(plot_x, plot_y, s=sizes, c="red", alpha=0.5, edgecolors="black")
 
     # Annotate points
     for i, (px, py, time) in enumerate(zip(plot_x, plot_y, times)):
@@ -96,17 +98,19 @@ def main(args):
     # Remove numbers (tick labels) from the axes
     ax.set_xticks([])
     ax.set_yticks([])
-    output_dir = "scanpath"
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
-    plt.savefig(args.output_scanpath)
+    if not os.path.isfile("scans.csv"):
+        with open("scans.csv", "w") as f:
+            f.write("userName,postID,length_plot_x\n")
+    with open("scans.csv", "a") as f:
+        f.write(f"{name_part},{post_id_part},{len(plot_x)}\n")
+    print(name_part, post_id_part)
+
+    # plt.savefig(args.output_scanpath)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Generate gaze duration and path visualization."
-    )
+    parser = argparse.ArgumentParser(description="Generate gaze duration and path visualization.")
     parser.add_argument(
         "-i",
         "--image_path",

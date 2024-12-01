@@ -36,9 +36,7 @@ def draw_display(dispsize, imagefile=None):
     if imagefile != None:
         # check if the path to the image exists
         if not os.path.isfile(imagefile):
-            raise Exception(
-                "ERROR in draw_display: imagefile not found at '%s'" % imagefile
-            )
+            raise Exception("ERROR in draw_display: imagefile not found at '%s'" % imagefile)
         # load image
 
         img = image.imread(imagefile)
@@ -93,13 +91,7 @@ def gaussian(x, sx, y=None, sy=None):
     # gaussian matrix
     for i in range(x):
         for j in range(y):
-            M[j, i] = numpy.exp(
-                -1.0
-                * (
-                    ((float(i) - xo) ** 2 / (2 * sx * sx))
-                    + ((float(j) - yo) ** 2 / (2 * sy * sy))
-                )
-            )
+            M[j, i] = numpy.exp(-1.0 * (((float(i) - xo) ** 2 / (2 * sx * sx)) + ((float(j) - yo) ** 2 / (2 * sy * sy))))
 
     return M
 
@@ -177,17 +169,13 @@ def draw_heatmap(
                 vadj[1] = gwh - int(y - dispsize[1])
             # add adjusted Gaussian to the current heatmap
             try:
-                heatmap[y : y + vadj[1], x : x + hadj[1]] += (
-                    gaus[vadj[0] : vadj[1], hadj[0] : hadj[1]] * gazepoints[i][2]
-                )
+                heatmap[y : y + vadj[1], x : x + hadj[1]] += gaus[vadj[0] : vadj[1], hadj[0] : hadj[1]] * gazepoints[i][2]
             except:
                 # fixation was probably outside of display
                 pass
         else:
             # add Gaussian to the current heatmap
-            heatmap[int(y) : int(y + gwh), int(x) : int(x + gwh)] += (
-                gaus * gazepoints[i][2]
-            )
+            heatmap[int(y) : int(y + gwh), int(x) : int(x + gwh)] += gaus * gazepoints[i][2]
     # resize heatmap
     strt = int(strt)
     heatmap = heatmap[strt : dispsize[1] + strt, strt : dispsize[0] + strt]
@@ -215,12 +203,8 @@ parser = argparse.ArgumentParser(description="Parameters required for processing
 
 # required args
 parser.add_argument("input-path", type=str, help="path to the csv input")
-parser.add_argument(
-    "display-width", type=int, help="an integer representing the display width"
-)
-parser.add_argument(
-    "display-height", type=int, help="an integer representing the display height"
-)
+parser.add_argument("display-width", type=int, help="an integer representing the display width")
+parser.add_argument("display-height", type=int, help="an integer representing the display height")
 
 # optional args
 parser.add_argument(
@@ -231,9 +215,7 @@ parser.add_argument(
     required=False,
     help="alpha for the gaze overlay",
 )
-parser.add_argument(
-    "-o", "--output-name", type=str, required=False, help="name for the output file"
-)
+parser.add_argument("-o", "--output-name", type=str, required=False, help="name for the output file")
 parser.add_argument(
     "-b",
     "--background-image",
