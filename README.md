@@ -45,6 +45,17 @@
 
 # Example of the generations
 
-![Example of the generations](https://github.com/sebastianbreguel/FacebookEyeTracker/tree/main/data/nn/heatmaps/nn_heatmap_0.png)
+<table>
+<tr>
+<td>
 
-![Example of the generations](https://github.com/sebastianbreguel/FacebookEyeTracker/tree/main/data/nn/scanpath/nn_scanpath_0.png)
+![Heatmap Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/heatmaps/nn_heatmap_0.png)
+
+</td>
+<td>
+
+![Scanpath Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/scanpath/nn_scanpath_0.png)
+
+</td>
+</tr>
+</table>
