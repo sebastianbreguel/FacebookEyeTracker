@@ -2,12 +2,13 @@ import argparse
 import json
 import os
 from datetime import datetime, timedelta
+from typing import Any, cast
 
 import pandas as pd
 import requests
 
 
-def download_and_filter_json(user_name, root):
+def download_and_filter_json(user_name: str, root: str) -> None:
     path = f"{root}/times/" + user_name + "_posts_times.json"
     url = "http://localhost:3001/download/answersPostsAndSurvey"
 
@@ -34,19 +35,19 @@ def download_and_filter_json(user_name, root):
         print(f"Error decoding JSON: {e}")
 
 
-def load_gaze_data(file_path):
+def load_gaze_data(file_path: str) -> pd.DataFrame:
     df = pd.read_csv(file_path)
     df["current_time"] = pd.to_datetime(df["current_time"], format="%Y-%m-%dT%H:%M:%S.%fZ")
     return df
 
 
-def load_json_data(file_path):
-    with open(file_path, "r") as file:
-        json_data = json.load(file)
+def load_json_data(file_path: str) -> list[Any]:
+    with open(file_path) as file:
+        json_data = cast(list[Any], json.load(file))
     return json_data
 
 
-def process_gaze_data(df, json_data):
+def process_gaze_data(df: pd.DataFrame, json_data: list[Any]) -> pd.DataFrame:
     # Step 1: initial date and first time
     initial_date = datetime.strptime(json_data[0]["initialDate"], "%Y-%m-%dT%H:%M:%S.%fZ")
     last_time_seconds = df[df["current_time"] - initial_date < timedelta(seconds=0)]
@@ -78,7 +79,7 @@ def process_gaze_data(df, json_data):
     return df
 
 
-def process_screenshots(screenshots_folder, json_data):
+def process_screenshots(screenshots_folder: str, json_data: list[Any]) -> pd.DataFrame:
     # Step 1: Get the list of screenshot files
     screenshot_files = os.listdir(screenshots_folder)
     screenshot_files = [file for file in screenshot_files if file.endswith(".png")]
@@ -114,14 +115,14 @@ def process_screenshots(screenshots_folder, json_data):
     return screenshot_df
 
 
-def assign_screenshot_filenames(df, screenshot_df):
+def assign_screenshot_filenames(df: pd.DataFrame, screenshot_df: pd.DataFrame) -> pd.DataFrame:
     screenshot_df["postID"] = screenshot_df["postID"].astype(int)
     postID_to_filename = screenshot_df.set_index("postID")["filename"].to_dict()
     df["screenshot_filename"] = df["postID"].map(postID_to_filename)
     return df
 
 
-def save_split_files(df, output_folder, name):
+def save_split_files(df: pd.DataFrame, output_folder: str, name: str) -> None:
     os.makedirs(output_folder, exist_ok=True)
     unique_post_ids = df["postID"].unique()
 
@@ -135,7 +136,7 @@ def save_split_files(df, output_folder, name):
     print(f"Archivos CSV creados en la carpeta {output_folder}")
 
 
-def collect_screenshots(unique_post_ids, name, root):
+def collect_screenshots(unique_post_ids: Any, name: str, root: str) -> None:
     for post_id in unique_post_ids:
         df_file = pd.read_csv(root + f"gaze_posts/{name}_gaze_{post_id}.csv")
         image_screenshot = root + f"screenshots/{df_file['screenshot_filename'].iloc[0]}"
@@ -147,11 +148,11 @@ def collect_screenshots(unique_post_ids, name, root):
             os.rename(image_screenshot, new_screenshot_path)
 
 
-def main():
-    argpase = argparse.ArgumentParser()
+def main() -> None:
+    parser = argparse.ArgumentParser()
 
-    argpase.add_argument("name", type=str, help="total seconds to collect data")
-    args = vars(argpase.parse_args())
+    parser.add_argument("name", type=str, help="total seconds to collect data")
+    args = vars(parser.parse_args())
     name = args["name"]
 
     root = f"data/{name}/"

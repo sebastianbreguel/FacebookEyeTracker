@@ -1,9 +1,8 @@
 import os
 
+
 # Specify the directory where the files are located
-names = [
-    "nn"
-]
+names = ["nn"]
 
 for name in names:
     folder_path = f"data/{name}/screenshots"

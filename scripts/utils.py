@@ -2,7 +2,7 @@ import winsound
 from datetime import datetime, timedelta, timezone
 
 
-def get_current_time_iso8601(option=1):
+def get_current_time_iso8601(option: int = 1) -> str:
     # Get the current time in UTC
     now = datetime.now(timezone.utc)
     # Format the time in ISO 8601 with milliseconds\
@@ -15,34 +15,39 @@ def get_current_time_iso8601(option=1):
     return formatted_time
 
 
-def try_float(value):
+def try_float(value: str) -> float:
     try:
         return float(value)
     except ValueError:
         return float("nan")
 
 
-def linear_interpolate(start, end, steps):
+def linear_interpolate(start: float, end: float, steps: int) -> list[float]:
     return [(start + (end - start) * i / steps) for i in range(1, steps)]
 
 
-def make_beep():
+def make_beep() -> None:
     frequency = 1000  # Set Frequency To 2500 Hertz
     duration_beep = 1000  # Set Duration To 1000 ms == 1 second
-    winsound.Beep(frequency, duration_beep)
+    winsound.Beep(frequency, duration_beep)  # type: ignore
     return None
 
 
-def subtract_seconds_from_datetime(datetime_str, seconds_to_subtract):
+def subtract_seconds_from_datetime(datetime_str: str, seconds_to_subtract: int) -> str:
     """
     Subtract a specified number of seconds from a datetime string.
 
-    Parameters:
-    - datetime_str (str): The original datetime string in the format "YYYY-MM-DDTHH:MM:SS.sssZ".
-    - seconds_to_subtract (int): The number of seconds to subtract from the datetime.
+    Parameters
+    ----------
+    datetime_str : str
+        The original datetime string in the format "YYYY-MM-DDTHH:MM:SS.sssZ".
+    seconds_to_subtract : int
+        The number of seconds to subtract from the datetime.
 
-    Returns:
-    - str: The new datetime string after subtracting the seconds, in the same format.
+    Returns
+    -------
+    str
+        The new datetime string after subtracting the seconds, in the same format.
     """
     # Parse the datetime string into a datetime object
     datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")

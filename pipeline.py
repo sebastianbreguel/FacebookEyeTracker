@@ -1,6 +1,6 @@
 import argparse
 import os
-import time
+
 
 argpase = argparse.ArgumentParser()
 

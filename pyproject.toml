@@ -1,0 +1,137 @@
+[project]
+requires-python = "==3.10"
+name = "facebook Eye tracker"
+version = "0.1.1"
+dynamic = ["dependencies"]
+description = "Repository for the facebook Eye tracker"
+authors = [{name = "Sebastian Breguel", email = "sebabreguel@uc.cl"}]
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: CC Attribution-NonCommercial 4.0 International",
+    "Operating System :: OS Independent",
+]
+
+[project.license]
+text = "CC BY-NC 4.0"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+
+[tool.ruff]
+line-length = 140
+fix = true
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "others",
+    "*.ipynb"
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "UP", "C4", "I", "TID"]
+fixable = ["ALL"]
+ignore = ["I"]  # Explicitly ignore all isort rules
+
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.isort]
+profile = "black"
+case_sensitive = false
+combine_as_imports = true
+balanced_wrapping = true
+line_length = 140
+multi_line_output = 3
+force_single_line = false
+include_trailing_comma = true
+force_grid_wrap = 0
+lines_after_imports = 2
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_gitignore = true
+known_third_party = [
+    "Levenshtein",
+    "Wikipedia-API",
+    "beautifulsoup4",
+    "black",
+    "boto3",
+    "datasets",
+    "datasketch",
+    "detect-secrets",
+    "einops",
+    "fasttext",
+    "flashinfer-python",
+    "ftfy",
+    "gliner",
+    "hdbscan",
+    "ipywidgets",
+    "isort",
+    "langchain_text_splitters",
+    "model2vec",
+    "mypy",
+    "numpy",
+    "plotly",
+    "pre-commit",
+    "pydantic",
+    "python-dotenv",
+    "python-magic",
+    "pyupgrade",
+    "qdrant-client",
+    "rank_bm25",
+    "ruff",
+    "s3fs",
+    "scikit-learn",
+    "sentence_transformers",
+    "tldextract",
+    "torch",
+    "tqdm",
+    "transformers",
+    "umap-learn",
+    "unstructured",
+    "vllm",
+    "wordcloud",
+]
+
+[tool.black]
+line-length = 140
+target-version = ['py310']
+skip-string-normalization = true
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+strict_optional = true
+no_implicit_optional = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+strict_equality = true
+
+
+[[tool.mypy.overrides]]
+module = "pydantic.*"
+ignore_missing_imports = true
+
+
+[[tool.mypy.overrides]]
+module = "src.3_QA.utils.structured_outputs"
+disable_error_code = ["misc"]
+
+[tool.pydoclint]
+style = "google"
+require-return-section = true
+require-raises-section = false
+check-types = true
+allow-init-docstring = true
+check-class-attributes = false
+quiet = false

@@ -1,16 +1,17 @@
 import argparse
 import math
 import os
+from typing import Any
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def euclidean_distance(x1, y1, x2, y2):
+def euclidean_distance(x1: float, y1: float, x2: float, y2: float) -> float:
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
 
-def main(args):
+def main(args: Any) -> None:
     # Load data
     data = pd.read_csv(args.gaze_csv)
     image = plt.imread(args.image_path)
@@ -71,15 +72,13 @@ def main(args):
     plot_y.append(last_y)
     times.append(accumulated_time if accumulated_time > 0 else 1)
 
-    total_diff = len(plot_x)
-
     # Normalize times for circle sizes
     max_time = max(times) if max(times) > 0 else 1
     sizes = [math.log(time) / math.log(max_time) * 500 for time in times]
 
     # Plot points and lines
     ax.plot(plot_x, plot_y, marker="", linestyle="-", color="red")
-    scatter = ax.scatter(plot_x, plot_y, s=sizes, c="red", alpha=0.5, edgecolors="black")
+    ax.scatter(plot_x, plot_y, s=sizes, c="red", alpha=0.5, edgecolors="black")
 
     # Annotate points
     for i, (px, py, time) in enumerate(zip(plot_x, plot_y, times)):

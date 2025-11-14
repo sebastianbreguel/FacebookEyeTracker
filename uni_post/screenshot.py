@@ -5,9 +5,9 @@ import time
 import pyautogui
 
 
-def screenshot(name, duration):
+def screenshot(name: str, duration: int) -> None:
     time.sleep(5)
-    target_folder = f"images"
+    target_folder = "images"
 
     screenshot_path = os.path.join(target_folder, f"{name}.png")
     screenshot = pyautogui.screenshot()

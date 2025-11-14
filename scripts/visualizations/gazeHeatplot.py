@@ -1,12 +1,13 @@
 import argparse
 import csv
 import os
+from typing import Any
 
 import numpy
 from matplotlib import image, pyplot
 
 
-def draw_display(dispsize, imagefile=None):
+def draw_display(dispsize: tuple[int, int], imagefile: str | None = None) -> tuple[Any, Any]:
     """Returns a matplotlib.pyplot Figure and its axes, with a size of
     dispsize, a black background colour, and optionally with an image drawn
     onto it
@@ -33,10 +34,10 @@ def draw_display(dispsize, imagefile=None):
     # construct screen (black background)
     screen = numpy.zeros((dispsize[1], dispsize[0], 3), dtype="float32")
     # if an image location has been passed, draw the image
-    if imagefile != None:
+    if imagefile is not None:
         # check if the path to the image exists
         if not os.path.isfile(imagefile):
-            raise Exception("ERROR in draw_display: imagefile not found at '%s'" % imagefile)
+            raise Exception(f"ERROR in draw_display: imagefile not found at '{imagefile}'")
         # load image
 
         img = image.imread(imagefile)
@@ -65,7 +66,7 @@ def draw_display(dispsize, imagefile=None):
     return fig, ax
 
 
-def gaussian(x, sx, y=None, sy=None):
+def gaussian(x: int, sx: float, y: int | None = None, sy: float | None = None) -> Any:
     """Returns an array of numpy arrays (a matrix) containing values between
     1 and 0 in a 2D Gaussian distribution
 
@@ -79,9 +80,9 @@ def gaussian(x, sx, y=None, sy=None):
     """
 
     # square Gaussian if only x values are passed
-    if y == None:
+    if y is None:
         y = x
-    if sy == None:
+    if sy is None:
         sy = sx
     # centers
     xo = x / 2
@@ -97,14 +98,14 @@ def gaussian(x, sx, y=None, sy=None):
 
 
 def draw_heatmap(
-    gazepoints,
-    dispsize,
-    imagefile=None,
-    alpha=0.5,
-    savefilename=None,
-    gaussianwh=200,
-    gaussiansd=None,
-):
+    gazepoints: list[tuple[int, int, int]],
+    dispsize: tuple[int, int],
+    imagefile: str | None = None,
+    alpha: float = 0.5,
+    savefilename: str | None = None,
+    gaussianwh: int = 200,
+    gaussiansd: float | None = None,
+) -> Any:
     """Draws a heatmap of the provided fixations, optionally drawn over an
     image, and optionally allocating more weight to fixations with a higher
     duration.
@@ -158,19 +159,21 @@ def draw_heatmap(
             hadj = [0, gwh]
             vadj = [0, gwh]
             if 0 > x:
-                hadj[0] = abs(x)
+                hadj[0] = int(abs(x))
                 x = 0
             elif dispsize[0] < x:
                 hadj[1] = gwh - int(x - dispsize[0])
             if 0 > y:
-                vadj[0] = abs(y)
+                vadj[0] = int(abs(y))
                 y = 0
             elif dispsize[1] < y:
                 vadj[1] = gwh - int(y - dispsize[1])
             # add adjusted Gaussian to the current heatmap
             try:
-                heatmap[y : y + vadj[1], x : x + hadj[1]] += gaus[vadj[0] : vadj[1], hadj[0] : hadj[1]] * gazepoints[i][2]
-            except:
+                heatmap[int(y) : int(y) + vadj[1], int(x) : int(x) + hadj[1]] += (
+                    gaus[vadj[0] : vadj[1], hadj[0] : hadj[1]] * gazepoints[i][2]
+                )
+            except (IndexError, ValueError):
                 # fixation was probably outside of display
                 pass
         else:
@@ -189,7 +192,7 @@ def draw_heatmap(
     # invert the y axis, as (0,0) is top left on a display
     ax.invert_yaxis()
     # save the figure if a file name was provided
-    if savefilename != None:
+    if savefilename is not None:
         fig.savefig(savefilename)
 
     return fig
@@ -260,11 +263,11 @@ with open(input_path) as f:
     reader = csv.reader(f)
     raw = list(reader)[1:]
 
-    gaza_data = []
+    gaza_data: list[Any] = []
     if len(raw[0]) == 2:
-        gaze_data = list(map(lambda q: (int(q[0]), int(q[1]), 1), raw))
+        gaze_data = [(int(q[0]), int(q[1]), 1) for q in raw]
     else:
-        gaze_data = list(map(lambda q: (int(q[0]), int(q[1]), 1), raw))
+        gaze_data = [(int(q[0]), int(q[1]), 1) for q in raw]
 
     draw_heatmap(
         gaze_data,

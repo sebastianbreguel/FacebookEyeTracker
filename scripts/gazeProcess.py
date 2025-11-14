@@ -5,14 +5,14 @@ import math
 from utils import linear_interpolate, try_float
 
 
-def process_gaze_data(input_file, output_file, width, height):
+def process_gaze_data(input_file: str, output_file: str, width: int, height: int) -> None:
     rows = []
 
     """
-    Read the data obtained by the generate.py 
+    Read the data obtained by the generate.py
     clean the data, avergae left and right and int values
     """
-    with open(input_file, mode="r") as infile, open(output_file, mode="w", newline="") as outfile:
+    with open(input_file) as infile, open(output_file, mode="w", newline="") as outfile:
         reader = csv.DictReader(infile)
         fieldnames = ["time_seconds", "current_time", "x", "y"]
 
@@ -49,7 +49,7 @@ def process_gaze_data(input_file, output_file, width, height):
     process_nans(rows, output_file)
 
 
-def process_nans(rows, output_file):
+def process_nans(rows: list[dict[str, str | int | float]], output_file: str) -> None:
     problems = []
     is_in_nans = False
     sub = []
@@ -102,13 +102,13 @@ def process_nans(rows, output_file):
 
 
 if __name__ == "__main__":
-    argparse = argparse.ArgumentParser(description="Process gaze data")
-    argparse.add_argument("input_file", type=str, help="Path to the input file")
-    argparse.add_argument("output_file", type=str, help="Path to the output file")
-    argparse.add_argument("width", type=int, help="Screen width")
-    argparse.add_argument("height", type=int, help="Screen height")
+    parser = argparse.ArgumentParser(description="Process gaze data")
+    parser.add_argument("input_file", type=str, help="Path to the input file")
+    parser.add_argument("output_file", type=str, help="Path to the output file")
+    parser.add_argument("width", type=int, help="Screen width")
+    parser.add_argument("height", type=int, help="Screen height")
 
-    args = argparse.parse_args()
+    args = parser.parse_args()
     input_file = args.input_file
     output_file = args.output_file
     width = args.width
