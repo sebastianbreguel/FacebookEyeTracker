@@ -2,15 +2,15 @@ import argparse
 import os
 
 
-argpase = argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 
 ## args: duration, name, width, height, input_file, output_file
-argpase.add_argument("duration", type=int, help="total seconds to collect data")
-argpase.add_argument("name", type=str, help="name of the output file")
-argpase.add_argument("width", type=int, help="Screen width", default=1920)
-argpase.add_argument("height", type=int, help="Screen height", default=1080)
+parser.add_argument("duration", type=int, help="total seconds to collect data")
+parser.add_argument("name", type=str, help="name of the output file")
+parser.add_argument("width", type=int, help="Screen width", default=1920)
+parser.add_argument("height", type=int, help="Screen height", default=1080)
 
-args = vars(argpase.parse_args())
+args = vars(parser.parse_args())
 duration = args["duration"]
 name = args["name"]
 width = args["width"]

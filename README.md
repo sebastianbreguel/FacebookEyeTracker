@@ -2,8 +2,6 @@
 
 A Python-based research tool for collecting, processing, and visualizing eye-tracking data while users view Facebook-like social media content. This tool captures gaze patterns using Tobii Pro Eye Trackers and generates heatmaps and scanpath visualizations to analyze user attention and engagement.
 
-## Output Examples
-
 ### Visualization Results
 
 The pipeline generates two types of visualizations for each post:
@@ -12,7 +10,7 @@ The pipeline generates two types of visualizations for each post:
 <tr>
 <td align="center" width="50%">
 
-**Heatmap Visualization- gaze intensit**
+**Heatmap Visualization - gaze intensity**
 
 ![Heatmap Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/heatmaps/nn_heatmap_0.png)
 
@@ -47,7 +45,6 @@ The pipeline generates two types of visualizations for each post:
 - [Project Structure](#project-structure)
 - [Data Flow](#data-flow)
 - [Configuration](#configuration)
-- [Output Examples](#output-examples)
 - [Troubleshooting](#troubleshooting)
 - [Known Issues](#known-issues)
 
@@ -234,20 +231,20 @@ python scripts/screenshot.py participant_01 60
 To process multiple participants:
 
 ```bash
-python iterate.py
+python tools/batch_process.py --participants participant_01 participant_02 --steps process match visualize
 ```
 
-Edit `iterate.py` to specify participant names and parameters.
+For more options, see `python tools/batch_process.py --help`.
 
 ## Project Structure
 
 ```
 FacebookEyeTracker/
 ├── README.md                          # This file
-├── requirements.txt                   # Python dependencies (incomplete)
+├── requirements.txt                   # Python dependencies
+├── pyproject.toml                     # Project configuration & linting rules
+├── .pre-commit-config.yaml            # Pre-commit hooks configuration
 ├── pipeline.py                        # Main pipeline orchestrator
-├── delete.py                          # Utility to clean up screenshots
-├── iterate.py                         # Batch processing script
 │
 ├── scripts/                           # Core processing scripts
 │   ├── generate.py                    # Eye tracker calibration & data collection
@@ -261,14 +258,18 @@ FacebookEyeTracker/
 │       ├── gazeHeatplot.py            # Generate heatmap visualizations
 │       └── scanpathPlot.py            # Generate scanpath visualizations
 │
-├── uni_post/                          # Unit test modules (single image testing)
-│   ├── generate.py
-│   ├── gazeProcess.py
-│   ├── gazeheatplot.py
-│   ├── pipeline.py
-│   ├── screenshot.py
-│   ├── utils.py
-│   └── readme.md
+├── tools/                             # Utility tools
+│   ├── batch_process.py               # Batch processing for multiple participants
+│   └── cleanup.py                     # Data cleanup utility
+│
+├── single_post_test/                  # Single image testing module
+│   ├── generate.py                    # Simplified generation for testing
+│   ├── gazeProcess.py                 # Test data processing
+│   ├── gazeheatplot.py                # Test heatmap generation
+│   ├── pipeline.py                    # Test pipeline
+│   ├── screenshot.py                  # Test screenshot capture
+│   ├── utils.py                       # Test utilities
+│   └── readme.md                      # Test module documentation
 │
 └── data/                              # Experimental data (created at runtime)
     └── <participant_name>/
@@ -432,10 +433,10 @@ time_seconds,current_time,x,y
 
 ### Batch Processing Output Example
 
-Running the new `batch_process.py` tool:
+Running the batch processing tool:
 
 ```bash
-$ python batch_process.py --participants alice bob charlie --steps visualize
+$ python tools/batch_process.py --participants alice bob charlie --steps visualize
 
 ============================================================
 BATCH PROCESSING
@@ -489,10 +490,10 @@ Total steps failed: 0
 
 ### Cleanup Utility Output Example
 
-Running the new `cleanup.py` tool:
+Running the cleanup tool:
 
 ```bash
-$ python cleanup.py --participants alice --visualizations
+$ python tools/cleanup.py --participants alice --visualizations
 
 ============================================================
 Processing participant: alice
