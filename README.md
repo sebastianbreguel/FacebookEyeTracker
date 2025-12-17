@@ -2,6 +2,31 @@
 
 A Python-based research tool for collecting, processing, and visualizing eye-tracking data while users view Facebook-like social media content. This tool captures gaze patterns using Tobii Pro Eye Trackers and generates heatmaps and scanpath visualizations to analyze user attention and engagement.
 
+## Output Examples
+
+### Visualization Results
+
+The pipeline generates two types of visualizations for each post:
+
+<table>
+<tr>
+<td align="center" width="50%">
+
+**Heatmap Visualization- gaze intensit**
+
+![Heatmap Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/heatmaps/nn_heatmap_0.png)
+
+</td>
+<td align="center" width="50%">
+
+**Scanpath Visualization - eye movement trajectory**
+
+![Scanpath Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/scanpath/nn_scanpath_0.png)
+
+</td>
+</tr>
+</table>
+
 ## Features
 
 - **Eye-tracking data collection** using Tobii Pro Eye Tracker hardware
@@ -29,11 +54,13 @@ A Python-based research tool for collecting, processing, and visualizing eye-tra
 ## Requirements
 
 ### Hardware
+
 - **Tobii Pro Eye Tracker** (tested with model TPNA1-030108540815)
 - **Windows PC** (required for Tobii Pro Eye Tracker Manager)
 - Monitor with standard resolution (default: 1920x1080)
 
 ### Software
+
 - **Python 3.7+**
 - **Tobii Pro Eye Tracker Manager** (Windows application)
 - **Backend server** running on `localhost:3001` (for post metadata)
@@ -108,6 +135,7 @@ python pipeline.py --duration 60 --name participant_01 --width 1920 --height 108
 ```
 
 **Parameters:**
+
 - `--duration`: Recording duration in seconds (e.g., 60)
 - `--name`: Participant identifier (e.g., "participant_01")
 - `--width`: Screen width in pixels (default: 1920)
@@ -124,6 +152,7 @@ python scripts/generate.py <duration_seconds> <participant_name>
 ```
 
 Example:
+
 ```bash
 python scripts/generate.py 60 participant_01
 ```
@@ -131,6 +160,7 @@ python scripts/generate.py 60 participant_01
 **Output**: `data/participant_01/gaze.csv`
 
 **Important**: You must update `generate.py` line 12 to match your Windows username before running:
+
 ```python
 user = "YourWindowsUsername"  # Change from "Nelson Breguel"
 ```
@@ -142,6 +172,7 @@ python scripts/gazeProcess.py <input_csv> <output_csv> <screen_width> <screen_he
 ```
 
 Example:
+
 ```bash
 python scripts/gazeProcess.py data/participant_01/gaze.csv data/participant_01/gaze_clean.csv 1920 1080
 ```
@@ -157,11 +188,13 @@ python scripts/match.py <participant_name>
 ```
 
 Example:
+
 ```bash
 python scripts/match.py participant_01
 ```
 
 **Output**:
+
 - `data/participant_01/times/participant_01_posts_times.json`
 - `data/participant_01/gaze_posts/participant_01_gaze_<post_id>.csv` (per post)
 
@@ -172,11 +205,13 @@ python scripts/visualizations.py <participant_name>
 ```
 
 Example:
+
 ```bash
 python scripts/visualizations.py participant_01
 ```
 
 **Output**:
+
 - `data/participant_01/heatmaps/participant_01_heatmap_<post_id>.png`
 - `data/participant_01/scanpath/participant_01_scanpath_<post_id>.png`
 
@@ -187,6 +222,7 @@ python scripts/screenshot.py <participant_name> <duration_seconds>
 ```
 
 Example:
+
 ```bash
 python scripts/screenshot.py participant_01 60
 ```
@@ -296,6 +332,7 @@ FacebookEyeTracker/
 Default resolution is 1920x1080. To use a different resolution:
 
 1. **Pass as command-line arguments**:
+
    ```bash
    python pipeline.py --duration 60 --name test --width 2560 --height 1440
    ```
@@ -324,39 +361,6 @@ Edit `scripts/match.py` line 12:
 ```python
 url = "http://localhost:3001/download/answersPostsAndSurvey"
 ```
-
-## Output Examples
-
-### Visualization Results
-
-The pipeline generates two types of visualizations for each post:
-
-<table>
-<tr>
-<td align="center" width="50%">
-
-**Heatmap Visualization**
-
-![Heatmap Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/heatmaps/nn_heatmap_0.png)
-
-Shows **gaze intensity** with warmer colors (red/yellow) indicating higher attention areas. The heatmap is overlaid on the original screenshot, making it easy to see which parts of the content attracted the most visual attention.
-
-**File**: `data/<name>/heatmaps/<name>_heatmap_<post_id>.png`
-
-</td>
-<td align="center" width="50%">
-
-**Scanpath Visualization**
-
-![Scanpath Example](https://github.com/sebastianbreguel/FacebookEyeTracker/blob/main/data_example/nn/scanpath/nn_scanpath_0.png)
-
-Shows **eye movement trajectory** with numbered circles representing fixation points in chronological order. Larger circles indicate longer fixation durations. Lines connect sequential fixations to show the reading/viewing path.
-
-**File**: `data/<name>/scanpath/<name>_scanpath_<post_id>.png`
-
-</td>
-</tr>
-</table>
 
 ### Example Data Structure
 
@@ -389,6 +393,7 @@ data/alice/
 ### Sample CSV Data
 
 **Raw Gaze Data** (`gaze.csv`):
+
 ```csv
 time_seconds,current_time,left_x,left_y,right_x,right_y
 0.000,2024-06-23T21:44:46.395Z,0.512,0.487,0.515,0.489
@@ -397,6 +402,7 @@ time_seconds,current_time,left_x,left_y,right_x,right_y
 ```
 
 **Processed Gaze Data** (`gaze_clean.csv`):
+
 ```csv
 time_seconds,current_time,x,y
 0.000,2024-06-23T21:44:46.395Z,985,487
@@ -405,6 +411,7 @@ time_seconds,current_time,x,y
 ```
 
 **Post Timing Data** (`times/alice_posts_times.json`):
+
 ```json
 [
   {
@@ -511,6 +518,7 @@ CLEANUP COMPLETE - Total files deleted: 6
 **Problem**: `ModuleNotFoundError: No module named 'pandas'` or `'requests'`
 
 **Solution**:
+
 ```bash
 pip install pandas requests
 ```
@@ -522,6 +530,7 @@ The `requirements.txt` is incomplete. These packages must be installed manually.
 **Problem**: `Could not find Tobii eye tracker`
 
 **Solutions**:
+
 1. Ensure the eye tracker is connected via USB
 2. Open Tobii Pro Eye Tracker Manager to verify device detection
 3. Check that the serial number in `generate.py` matches your device
@@ -538,6 +547,7 @@ The `requirements.txt` is incomplete. These packages must be installed manually.
 **Problem**: Heatmaps show no data or incorrect positions
 
 **Possible causes**:
+
 1. **Screen resolution mismatch**: Verify width/height parameters match your display
 2. **Calibration issue**: Recalibrate the eye tracker using Tobii Pro Eye Tracker Manager
 3. **Processing bug**: There's a known bug in `gazeProcess.py` line 37-38 (see Known Issues)
@@ -559,11 +569,13 @@ The `requirements.txt` is incomplete. These packages must be installed manually.
 ### Critical Bugs
 
 1. **Coordinate averaging bug** (`scripts/gazeProcess.py:37-38`)
+
    - When left eye data is NaN, assigns `right_y` to `avg_x` (should be `right_x`)
    - **Impact**: Corrupts gaze coordinates
    - **Fix needed**: Change `right_y` to `right_x` on line 37
 
 2. **Scanpath images not saved** (`scripts/scanpathPlot.py:109`)
+
    - `plt.savefig()` is commented out
    - **Impact**: Scanpath visualizations aren't actually saved
    - **Fix needed**: Uncomment the line
