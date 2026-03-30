@@ -1,18 +1,20 @@
-import winsound
+import platform
 from datetime import datetime, timedelta, timezone
 
 
 def get_current_time_iso8601(option: int = 1) -> str:
-    # Get the current time in UTC
-    now = datetime.now(timezone.utc)
-    # Format the time in ISO 8601 with milliseconds\
-    if option == 1:
-        formatted_time = now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
-    elif option == 2:
-        # for the screenshots
-        formatted_time = now.strftime("%Y-%m-%dT%H_%M_%S")
+    """Return the current UTC time formatted as ISO 8601.
 
-    return formatted_time
+    Args:
+        option: 1 for full ISO 8601 with milliseconds, 2 for filename-safe format.
+
+    Returns:
+        Formatted time string.
+    """
+    now = datetime.now(timezone.utc)
+    if option == 2:
+        return now.strftime("%Y-%m-%dT%H_%M_%S")
+    return now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
 
 def try_float(value: str) -> float:
@@ -27,10 +29,13 @@ def linear_interpolate(start: float, end: float, steps: int) -> list[float]:
 
 
 def make_beep() -> None:
-    frequency = 1000  # Set Frequency To 2500 Hertz
-    duration_beep = 1000  # Set Duration To 1000 ms == 1 second
-    winsound.Beep(frequency, duration_beep)  # type: ignore
-    return None
+    """Play a 1-second beep to signal task completion (Windows only)."""
+    if platform.system() == "Windows":
+        import winsound  # type: ignore[import-not-found]
+
+        winsound.Beep(1000, 1000)  # type: ignore[attr-defined]
+    else:
+        print("\a", end="", flush=True)
 
 
 def subtract_seconds_from_datetime(datetime_str: str, seconds_to_subtract: int) -> str:

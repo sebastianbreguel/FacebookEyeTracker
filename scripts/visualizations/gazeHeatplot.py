@@ -1,4 +1,5 @@
 import argparse
+import contextlib
 import csv
 import os
 from typing import Any
@@ -88,13 +89,15 @@ def gaussian(x: int, sx: float, y: int | None = None, sy: float | None = None) -
     xo = x / 2
     yo = y / 2
     # matrix of zeros
-    M = numpy.zeros([y, x], dtype=float)
+    mat = numpy.zeros([y, x], dtype=float)
     # gaussian matrix
     for i in range(x):
         for j in range(y):
-            M[j, i] = numpy.exp(-1.0 * (((float(i) - xo) ** 2 / (2 * sx * sx)) + ((float(j) - yo) ** 2 / (2 * sy * sy))))
+            mat[j, i] = numpy.exp(
+                -1.0 * (((float(i) - xo) ** 2 / (2 * sx * sx)) + ((float(j) - yo) ** 2 / (2 * sy * sy)))
+            )
 
-    return M
+    return mat
 
 
 def draw_heatmap(
@@ -158,24 +161,21 @@ def draw_heatmap(
         if (not 0 < x < dispsize[0]) or (not 0 < y < dispsize[1]):
             hadj = [0, gwh]
             vadj = [0, gwh]
-            if 0 > x:
+            if x < 0:
                 hadj[0] = int(abs(x))
                 x = 0
             elif dispsize[0] < x:
                 hadj[1] = gwh - int(x - dispsize[0])
-            if 0 > y:
+            if y < 0:
                 vadj[0] = int(abs(y))
                 y = 0
             elif dispsize[1] < y:
                 vadj[1] = gwh - int(y - dispsize[1])
             # add adjusted Gaussian to the current heatmap
-            try:
+            with contextlib.suppress(IndexError, ValueError):
                 heatmap[int(y) : int(y) + vadj[1], int(x) : int(x) + hadj[1]] += (
                     gaus[vadj[0] : vadj[1], hadj[0] : hadj[1]] * gazepoints[i][2]
                 )
-            except (IndexError, ValueError):
-                # fixation was probably outside of display
-                pass
         else:
             # add Gaussian to the current heatmap
             heatmap[int(y) : int(y + gwh), int(x) : int(x + gwh)] += gaus * gazepoints[i][2]

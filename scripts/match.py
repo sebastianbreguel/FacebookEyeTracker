@@ -16,7 +16,7 @@ def download_and_filter_json(user_name: str, root: str) -> None:
         return
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=30)
         response.raise_for_status()  # Verifica si hubo algún error en la solicitud
 
         # Decodifica el contenido JSON
@@ -117,8 +117,8 @@ def process_screenshots(screenshots_folder: str, json_data: list[Any]) -> pd.Dat
 
 def assign_screenshot_filenames(df: pd.DataFrame, screenshot_df: pd.DataFrame) -> pd.DataFrame:
     screenshot_df["postID"] = screenshot_df["postID"].astype(int)
-    postID_to_filename = screenshot_df.set_index("postID")["filename"].to_dict()
-    df["screenshot_filename"] = df["postID"].map(postID_to_filename)
+    post_id_to_filename = screenshot_df.set_index("postID")["filename"].to_dict()
+    df["screenshot_filename"] = df["postID"].map(post_id_to_filename)
     return df
 
 

@@ -34,8 +34,8 @@ def process_gaze_data(input_file: str, output_file: str, width: int, height: int
             if math.isnan(right_y) and not math.isnan(left_y):
                 right_y = left_y
 
-            avg_x = int((left_x + right_x) / 2 * width) if not math.isnan(left_x) else right_y
-            avg_y = int((left_y + right_y) / 2 * height) if not math.isnan(left_y) else right_y
+            avg_x = int((left_x + right_x) / 2 * width) if not math.isnan(left_x) else float("nan")
+            avg_y = int((left_y + right_y) / 2 * height) if not math.isnan(left_y) else float("nan")
 
             rows.append(
                 {

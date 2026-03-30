@@ -1,60 +1,61 @@
 import argparse
-import json
-import os
-from typing import Any, cast
-
-import pandas as pd
+import subprocess
+import sys
+from pathlib import Path
 
 
-def load_gaze_data(file_path: str) -> pd.DataFrame:
-    df = pd.read_csv(file_path)
-    df["current_time"] = pd.to_datetime(df["current_time"], format="%Y-%m-%dT%H:%M:%S.%fZ")
-    return df
+def extract_post_id(filename: str) -> int:
+    """Extract the post ID from a gaze CSV filename like 'name_gaze_42.csv'."""
+    return int(filename.split("_")[-1].replace(".csv", ""))
 
 
-def load_json_data(file_path: str) -> list[Any]:
-    with open(file_path) as file:
-        json_data = cast(list[Any], json.load(file))
-    return json_data
+def create_visualizations(post_ids: list[int], name: str, root: Path, width: int = 1920, height: int = 1080) -> None:
+    """Generate heatmap and scanpath visualizations for each post."""
+    for post_id in post_ids:
+        input_csv = str(root / f"gaze_posts/{name}_gaze_{post_id}.csv")
+        screenshot_path = str(root / f"screenshots/{name}_screenshot_{post_id}.png")
+        heatmap_file = str(root / f"heatmaps/{name}_heatmap_{post_id}.png")
+        scanpath_file = str(root / f"scanpath/{name}_scanpath_{post_id}.png")
 
-
-def extract_number_simple(filename: str) -> int:
-    # Split by underscore and take the second last element (index -2)
-    parts = filename.split("_")
-    # Remove the '.csv' and convert to integer
-    number = int(parts[-1].replace(".csv", ""))
-    return number
-
-
-def create_visualizations(unique_post_ids: list[int], name: str, root: str, width: int = 1920, height: int = 1080) -> None:
-    for post_id in unique_post_ids:
-        input_csv = root + f"gaze_posts/{name}_gaze_{post_id}.csv"
-        screenshot_path = root + f"screenshots/{name}_screenshot_{post_id}.png"
-
-        heatmap_file = root + f"heatmaps/{name}_heatmap_{post_id}.png"
-        scanpath_file = root + f"scanpath/{name}_scanpath_{post_id}.png"
-
-        os.system(f"python scripts/visualizations/gazeHeatplot.py {input_csv} {width} {height} -b {screenshot_path} -o {heatmap_file}")
-
-        os.system(f"python scripts/visualizations/scanpathPlot.py -g {input_csv} -i {screenshot_path} -o {scanpath_file}")
+        subprocess.run(
+            [
+                sys.executable,
+                "scripts/visualizations/gazeHeatplot.py",
+                input_csv,
+                str(width),
+                str(height),
+                "-b",
+                screenshot_path,
+                "-o",
+                heatmap_file,
+            ],
+            check=False,
+        )
+        subprocess.run(
+            [
+                sys.executable,
+                "scripts/visualizations/scanpathPlot.py",
+                "-g",
+                input_csv,
+                "-i",
+                screenshot_path,
+                "-o",
+                scanpath_file,
+            ],
+            check=False,
+        )
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Generate heatmap and scanpath visualizations")
+    parser.add_argument("name", type=str, help="Participant name")
+    args = parser.parse_args()
 
-    parser.add_argument("name", type=str, help="total seconds to collect data")
-    args = vars(parser.parse_args())
-    name = args["name"]
+    root = Path("data") / args.name
+    gaze_posts_dir = root / "gaze_posts"
 
-    root = f"data/{name}/"
-
-    post_files = os.listdir(root + "gaze_posts")
-    unique_post_ids = []
-    for post_file in post_files:
-        number = extract_number_simple(post_file)
-        unique_post_ids.append(number)
-
-    create_visualizations(unique_post_ids, name, root)
+    post_ids = [extract_post_id(f.name) for f in gaze_posts_dir.glob("*.csv")]
+    create_visualizations(post_ids, args.name, root)
 
 
 if __name__ == "__main__":

@@ -1,47 +1,64 @@
 import argparse
-import os
+import subprocess
+import sys
+from pathlib import Path
 
 
-parser = argparse.ArgumentParser()
-
-## args: duration, name, width, height, input_file, output_file
-parser.add_argument("duration", type=int, help="total seconds to collect data")
-parser.add_argument("name", type=str, help="name of the output file")
-parser.add_argument("width", type=int, help="Screen width", default=1920)
-parser.add_argument("height", type=int, help="Screen height", default=1080)
-
-args = vars(parser.parse_args())
-duration = args["duration"]
-name = args["name"]
-width = args["width"]
-height = args["height"]
-base = f"data/{name}/screenshots/screenshot_2024-06-21T00_45_29.png"
-
-# input for the processing
-input_file = f"data/{name}/gaze"
+def run_step(cmd: list[str], description: str) -> None:
+    """Run a pipeline step and exit on failure."""
+    print(f"\n--- {description} ---")
+    result = subprocess.run(cmd, check=False)
+    if result.returncode != 0:
+        print(f"ERROR: {description} failed (exit code {result.returncode})")
+        sys.exit(result.returncode)
 
 
-# make folder for the gaze of the user, screenshots and heatmap
-os.makedirs(f"data/{name}/gaze_posts", exist_ok=True)
-os.makedirs(f"data/{name}/times", exist_ok=True)
-os.makedirs(f"data/{name}/screenshots", exist_ok=True)
-os.makedirs(f"data/{name}/heatmaps", exist_ok=True)
-os.makedirs(f"data/{name}/scanpath", exist_ok=True)
-print(f"Directories for {name} created successfully.")
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Eye-tracking data collection and visualization pipeline")
+    parser.add_argument("--duration", type=int, required=True, help="Recording duration in seconds")
+    parser.add_argument("--name", type=str, required=True, help="Participant identifier")
+    parser.add_argument("--width", type=int, default=1920, help="Screen width in pixels")
+    parser.add_argument("--height", type=int, default=1080, help="Screen height in pixels")
+
+    args = parser.parse_args()
+
+    # Create output directories
+    base = Path("data") / args.name
+    for subdir in ["gaze_posts", "times", "screenshots", "heatmaps", "scanpath"]:
+        (base / subdir).mkdir(parents=True, exist_ok=True)
+    print(f"Directories for {args.name} created successfully.")
+
+    gaze_file = base / "gaze"
+
+    run_step(
+        [sys.executable, "scripts/generate.py", str(args.duration), args.name],
+        "Collecting eye-tracking data",
+    )
+
+    run_step(
+        [
+            sys.executable,
+            "scripts/gazeProcess.py",
+            f"{gaze_file}.csv",
+            f"{gaze_file}_clean.csv",
+            str(args.width),
+            str(args.height),
+        ],
+        "Processing gaze data",
+    )
+
+    run_step(
+        [sys.executable, "scripts/match.py", args.name],
+        "Matching data with post metadata",
+    )
+
+    run_step(
+        [sys.executable, "scripts/visualizations.py", args.name],
+        "Generating visualizations",
+    )
+
+    print(f"\nPipeline completed for {args.name}")
 
 
-# print("Running eye tracker")
-# os.system(f"python scripts/generate.py {duration} {name}")
-
-
-# print("Processing gaze data")
-# os.system(
-#     f"python scripts/gazeProcess.py {input_file}.csv {input_file}_clean.csv {width} {height}"
-# )
-
-
-print("Matching data with json files")
-os.system(f"python scripts/match.py {name}")
-
-print("Generating visualizations")
-os.system(f"python scripts/visualizations.py {name}")
+if __name__ == "__main__":
+    main()

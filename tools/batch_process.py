@@ -246,7 +246,7 @@ Examples:
         all_results.append(results)
 
         # Count successes and failures
-        for step, success in results["steps"].items():
+        for _step, success in results["steps"].items():
             if success:
                 total_success += 1
             else:

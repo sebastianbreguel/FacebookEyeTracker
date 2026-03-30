@@ -70,21 +70,17 @@ def save_gaze_data(gaze_samples_list: list[dict[str, Any]], name: str) -> None:
 
     # print("Sample dictionary keys:", gaze_samples_list[0].keys())
 
-    file_handle = open(f"data/{name}/gaze.csv", "w")
-    gaze_writer = csv.writer(file_handle)
-    gaze_writer.writerow(["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"])
-    start_time = gaze_samples_list[0]["system_time_stamp"]
-    for recording_dict in gaze_samples_list:
-        sample_time_from_start = recording_dict["system_time_stamp"] - start_time
+    with open(f"data/{name}/gaze.csv", "w", newline="") as file_handle:
+        gaze_writer = csv.writer(file_handle)
+        gaze_writer.writerow(["time_seconds", "current_time", "left_x", "left_y", "right_x", "right_y"])
+        start_time = gaze_samples_list[0]["system_time_stamp"]
+        for recording_dict in gaze_samples_list:
+            sample_time_from_start = (recording_dict["system_time_stamp"] - start_time) / 1e6
 
-        sample_time_from_start = sample_time_from_start / (10 ** (6))  # convert from microseconds to seconds
-
-        current_time = recording_dict["current_time"]
-
-        left_x, left_y = recording_dict["left_gaze_point_on_display_area"]
-        right_x, right_y = recording_dict["right_gaze_point_on_display_area"]
-        gaze_writer.writerow([sample_time_from_start, current_time, left_x, left_y, right_x, right_y])
-    file_handle.close()
+            current_time = recording_dict["current_time"]
+            left_x, left_y = recording_dict["left_gaze_point_on_display_area"]
+            right_x, right_y = recording_dict["right_gaze_point_on_display_area"]
+            gaze_writer.writerow([sample_time_from_start, current_time, left_x, left_y, right_x, right_y])
 
     make_beep()
 

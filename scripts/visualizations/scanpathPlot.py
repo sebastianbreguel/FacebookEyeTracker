@@ -81,7 +81,7 @@ def main(args: Any) -> None:
     ax.scatter(plot_x, plot_y, s=sizes, c="red", alpha=0.5, edgecolors="black")
 
     # Annotate points
-    for i, (px, py, time) in enumerate(zip(plot_x, plot_y, times)):
+    for i, (px, py, _time) in enumerate(zip(plot_x, plot_y, times, strict=False)):
         ax.annotate(
             i,
             (px, py),
@@ -105,7 +105,8 @@ def main(args: Any) -> None:
         f.write(f"{name_part},{post_id_part},{len(plot_x)}\n")
     print(name_part, post_id_part)
 
-    # plt.savefig(args.output_scanpath)
+    plt.savefig(args.output_scanpath, dpi=150, bbox_inches="tight")
+    plt.close(fig)
 
 
 if __name__ == "__main__":
