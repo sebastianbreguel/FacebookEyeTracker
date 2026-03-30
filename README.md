@@ -228,6 +228,37 @@ uv run pre-commit run --all-files
 
 This project is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) --- free to share and adapt for non-commercial purposes with attribution.
 
+## Citation
+
+If you use this project in your research, please cite it:
+
+```bibtex
+@techreport{breguel2024facebookeyetracker,
+  author      = {Breguel, Sebastian},
+  title       = {FacebookEyeTracker: A Pipeline for Collecting, Processing,
+                 and Visualizing Eye-Tracking Data on Social Media Content},
+  institution = {Pontificia Universidad Cat\'{o}lica de Chile},
+  year        = {2024},
+  type        = {Technical Report},
+  url         = {https://github.com/sebastianbreguel/FacebookEyeTracker},
+  note        = {Developed as part of XR course research}
+}
+```
+
+<!-- If published on arXiv, use this instead:
+```bibtex
+@article{breguel2024facebookeyetracker,
+  author  = {Breguel, Sebastian},
+  title   = {FacebookEyeTracker: A Pipeline for Collecting, Processing,
+             and Visualizing Eye-Tracking Data on Social Media Content},
+  journal = {arXiv preprint arXiv:XXXX.XXXXX},
+  year    = {2024}
+}
+```
+-->
+
+Also available via GitHub's **"Cite this repository"** button (powered by [`CITATION.cff`](CITATION.cff)).
+
 ## Author
 
 **Sebastian Breguel** --- [sebabreguel@uc.cl](mailto:sebabreguel@uc.cl)
