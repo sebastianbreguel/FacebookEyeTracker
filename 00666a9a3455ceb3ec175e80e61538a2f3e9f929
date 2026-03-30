@@ -1,0 +1,29 @@
+README.md
+  4f0c2538b811f2be 231-261
+CITATION.cff
+  4f0c2538b811f2be 1-30
+paper/main.tex
+  4f0c2538b811f2be 1-300
+paper/references.bib
+  4f0c2538b811f2be 1-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.22",
+  "base_commit_sha": "00666a9a3455ceb3ec175e80e61538a2f3e9f929",
+  "prompts": {
+    "4f0c2538b811f2be": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1d4f42b4-b043-40f4-b404-9e3f03fe3d6f",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "sebastianbreguel <62109266+sebastianbreguel@users.noreply.github.com>",
+      "messages": [],
+      "total_additions": 773,
+      "total_deletions": 293,
+      "accepted_lines": 480,
+      "overriden_lines": 0
+    }
+  }
+}
